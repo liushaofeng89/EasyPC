@@ -11,31 +11,37 @@
          </run>
       </application>
    </extension>
+   
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RCP Perspective"
-            class="cn.liushaofeng.easypc.app.Perspective"
-            id="EasyPC.perspective">
+            name="普通用户"
+            class="cn.liushaofeng.easypc.perspectives.SimplePerspective"
+            id="cn.liushaofeng.easypc.perspecties.simpleperspective">
       </perspective>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="设计师"
+            class="cn.liushaofeng.easypc.perspectives.DesignerPerspective"
+            id="cn.liushaofeng.easypc.perspecties.designerperspective">
+      </perspective>
+   </extension>
+   
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="Message"
+            name="资源管理器"
             allowMultiple="true"
-            icon="icons/sample2.gif"
-            class="easypc.View"
-            id="EasyPC.view">
-      </view>
-      <view
-            name="Mailboxes"
-            allowMultiple="true"
-            icon="icons/sample3.gif"
-            class="easypc.NavigationView"
-            id="EasyPC.navigationView">
+            icon="icons/home.gif"
+            class="cn.liushaofeng.easypc.views.FileExplorerView"
+            id="cn.liushaofeng.easypc.views.fileexplorerview">
       </view>
    </extension>
+   
+   
    <extension
          point="org.eclipse.ui.commands">
       <category

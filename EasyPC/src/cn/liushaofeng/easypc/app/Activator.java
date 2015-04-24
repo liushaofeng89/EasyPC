@@ -1,6 +1,9 @@
 package cn.liushaofeng.easypc.app;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -9,7 +12,6 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin
 {
-
     // The plug-in ID
     public static final String PLUGIN_ID = "EasyPC"; //$NON-NLS-1$
 
@@ -66,4 +68,15 @@ public class Activator extends AbstractUIPlugin
     {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
+
+    /**
+     * get image descriptor
+     * @param path image path(such as:ISharedImages.IMG_DEF_VIEW)
+     * @return ImageDescriptor
+     */
+    public static ImageDescriptor getSysImageDescriptor(String path)
+    {
+        return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(path);
+    }
+
 }

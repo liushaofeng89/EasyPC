@@ -6,7 +6,8 @@ import org.eclipse.ui.part.ViewPart;
 /**
  * 控制台
  * @author liushaofeng
- * @date 2015年4月23日
+ * @date 2015年4月24日
+ * @version 1.0.0
  */
 public class ConsoleView extends ViewPart
 {
