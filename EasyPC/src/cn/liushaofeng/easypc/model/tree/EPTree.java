@@ -12,7 +12,6 @@ import java.util.List;
 public class EPTree
 {
     private EPTree parent;
-    private String name;
     private List<EPTree> children = new ArrayList<EPTree>();
     private Object data;
 
@@ -29,16 +28,6 @@ public class EPTree
     public void setParent(EPTree parent)
     {
         this.parent = parent;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
     }
 
     public List<EPTree> getChildren()

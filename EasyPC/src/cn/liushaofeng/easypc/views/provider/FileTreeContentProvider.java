@@ -5,8 +5,6 @@ import java.io.File;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import cn.liushaofeng.easypc.model.tree.EPTree;
-
 /**
  * 资源管理器内容提供器
  * @author liushaofeng
@@ -19,10 +17,14 @@ public class FileTreeContentProvider implements ITreeContentProvider
     @Override
     public Object[] getChildren(Object arg0)
     {
-        if (arg0 instanceof EPTree)
+        if (arg0 instanceof File)
         {
-            EPTree tree = (EPTree) arg0;
-            return tree.getChildren().toArray();
+            File f = (File) arg0;
+            if (f.isDirectory())
+            {
+                return f.listFiles();
+            }
+            return null;
         }
         return new Object[0];
     }
@@ -34,21 +36,16 @@ public class FileTreeContentProvider implements ITreeContentProvider
         {
             return (File[]) arg0;
         }
-        if (arg0 instanceof EPTree)
-        {
-            EPTree tree = (EPTree) arg0;
-            return tree.getChildren().toArray();
-        }
         return null;
     }
 
     @Override
     public Object getParent(Object arg0)
     {
-        if (arg0 instanceof EPTree)
+        if (arg0 instanceof File)
         {
-            EPTree tree = (EPTree) arg0;
-            return tree.getParent();
+            File f = (File) arg0;
+            return f.getParentFile();
         }
         return null;
     }
@@ -56,10 +53,14 @@ public class FileTreeContentProvider implements ITreeContentProvider
     @Override
     public boolean hasChildren(Object arg0)
     {
-        if (arg0 instanceof EPTree)
+        if (arg0 instanceof File)
         {
-            EPTree tree = (EPTree) arg0;
-            return tree.hasChild();
+            File f = (File) arg0;
+            if (f.isDirectory())
+            {
+                return true;
+            }
+            return false;
         }
         return false;
     }
@@ -73,7 +74,6 @@ public class FileTreeContentProvider implements ITreeContentProvider
     @Override
     public void dispose()
     {
-        // TODO Auto-generated method stub
 
     }
 }

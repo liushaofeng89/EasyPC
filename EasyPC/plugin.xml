@@ -31,6 +31,15 @@
    </extension>
    
    <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="网络"
+            class="cn.liushaofeng.easypc.perspectives.NetWorkerPerspective"
+            id="cn.liushaofeng.easypc.perspecties.networkerperspective">
+      </perspective>
+   </extension>
+   
+   <extension
          point="org.eclipse.ui.views">
       <view
             name="资源管理器"
@@ -40,7 +49,26 @@
             id="cn.liushaofeng.easypc.views.fileexplorerview">
       </view>
    </extension>
-   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="联系人"
+            allowMultiple="true"
+            icon="icons/contact.gif"
+            class="cn.liushaofeng.easypc.views.ContactView"
+            id="cn.liushaofeng.easypc.views.contactview">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="控制台"
+            allowMultiple="true"
+            icon="icons/console.gif"
+            class="cn.liushaofeng.easypc.views.ConsoleView"
+            id="cn.liushaofeng.easypc.views.consoleview">
+      </view>
+   </extension>
    
    <extension
          point="org.eclipse.ui.commands">

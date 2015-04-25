@@ -1,8 +1,11 @@
 package cn.liushaofeng.easypc.perspectives;
 
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
+import cn.liushaofeng.easypc.views.ConsoleView;
+import cn.liushaofeng.easypc.views.ContactView;
 import cn.liushaofeng.easypc.views.FileExplorerView;
 
 /**
@@ -22,7 +25,13 @@ public class SimplePerspective implements IPerspectiveFactory
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(true);
 
-        layout.addStandaloneView(FileExplorerView.ID, false, IPageLayout.LEFT, 0.25f, editorArea);
+        IFolderLayout createFolder = layout.createFolder("left", IPageLayout.LEFT, 0.25f, editorArea);
+        createFolder.addView(FileExplorerView.ID);
+        createFolder.addView(ContactView.ID);
+        createFolder.addPlaceholder(FileExplorerView.ID);
+        createFolder.addPlaceholder(ContactView.ID);
+
+        layout.addView(ConsoleView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
     }
 
 }

@@ -1,6 +1,8 @@
 package cn.liushaofeng.easypc.views;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -12,12 +14,13 @@ import org.eclipse.ui.part.ViewPart;
 public class ConsoleView extends ViewPart
 {
     public static final String ID = "cn.liushaofeng.easypc.views.consoleview";
+    private Text text = null;
 
     @Override
     public void createPartControl(Composite arg0)
     {
-        // TODO Auto-generated method stub
-
+        text = new Text(arg0, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+        text.setEditable(false);
     }
 
     @Override

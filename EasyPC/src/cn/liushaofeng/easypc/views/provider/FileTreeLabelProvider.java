@@ -5,8 +5,9 @@ import java.io.File;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.ISharedImages;
 
-import cn.liushaofeng.easypc.model.tree.EPTree;
+import cn.liushaofeng.easypc.app.Activator;
 
 /**
  * 文件资源管理器标签提供器
@@ -24,15 +25,10 @@ public class FileTreeLabelProvider implements ILabelProvider
             File f = (File) arg0;
             if (f.isDirectory())
             {
-                return null;
-            }
-        }
-        if (arg0 instanceof EPTree)
-        {
-            EPTree tree = (EPTree) arg0;
-            if (tree.getParent() == null)
+                return Activator.getImage(true, ISharedImages.IMG_OBJ_FOLDER);
+            } else
             {
-
+                return Activator.getImage(true, ISharedImages.IMG_OBJ_FILE);
             }
         }
         return null;
@@ -43,7 +39,12 @@ public class FileTreeLabelProvider implements ILabelProvider
     {
         if (arg0 instanceof File)
         {
-            return ((File) arg0).getPath();
+            File f = (File) arg0;
+            if (f.getParentFile() == null)
+            {
+                return f.getPath();
+            }
+            return f.getName();
         }
         return null;
     }
