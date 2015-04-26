@@ -15,7 +15,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="普通用户"
+            name="Simple User"
             class="cn.liushaofeng.easypc.perspectives.SimplePerspective"
             id="cn.liushaofeng.easypc.perspecties.simpleperspective">
       </perspective>
@@ -24,7 +24,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="设计师"
+            name="Designer"
             class="cn.liushaofeng.easypc.perspectives.DesignerPerspective"
             id="cn.liushaofeng.easypc.perspecties.designerperspective">
       </perspective>
@@ -33,7 +33,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="网络"
+            name="Networker"
             class="cn.liushaofeng.easypc.perspectives.NetWorkerPerspective"
             id="cn.liushaofeng.easypc.perspecties.networkerperspective">
       </perspective>
@@ -42,7 +42,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="资源管理器"
+            name="File Explorer"
             allowMultiple="true"
             icon="icons/home.gif"
             class="cn.liushaofeng.easypc.views.FileExplorerView"
@@ -52,7 +52,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="联系人"
+            name="Contact"
             allowMultiple="true"
             icon="icons/contact.gif"
             class="cn.liushaofeng.easypc.views.ContactView"
@@ -62,13 +62,27 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            name="控制台"
+            name="Console"
             allowMultiple="true"
             icon="icons/console.gif"
             class="cn.liushaofeng.easypc.views.ConsoleView"
             id="cn.liushaofeng.easypc.views.consoleview">
       </view>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors">
+      <view
+            name="Text Editor"
+            default="false"
+            contributorClass="cn.liushaofeng.easypc.editors.contributors.TextEditorContributor"
+            icon="icons/console.gif"
+            class="cn.liushaofeng.easypc.editors.TextEditor"
+            id="cn.liushaofeng.easypc.editors.texteditorview">
+      </view>
+   </extension>
+   
+   
    
    <extension
          point="org.eclipse.ui.commands">

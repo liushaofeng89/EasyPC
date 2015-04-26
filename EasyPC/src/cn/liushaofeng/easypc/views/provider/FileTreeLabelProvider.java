@@ -5,7 +5,6 @@ import java.io.File;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
 
 import cn.liushaofeng.easypc.app.Activator;
 
@@ -17,19 +16,14 @@ import cn.liushaofeng.easypc.app.Activator;
  */
 public class FileTreeLabelProvider implements ILabelProvider
 {
+
     @Override
     public Image getImage(Object arg0)
     {
         if (arg0 instanceof File)
         {
             File f = (File) arg0;
-            if (f.isDirectory())
-            {
-                return Activator.getImage(true, ISharedImages.IMG_OBJ_FOLDER);
-            } else
-            {
-                return Activator.getImage(true, ISharedImages.IMG_OBJ_FILE);
-            }
+            return Activator.getImage(f);
         }
         return null;
     }

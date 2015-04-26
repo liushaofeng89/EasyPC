@@ -30,6 +30,11 @@ import easypc.View;
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 {
 
+    private static final String WORKING_SET_STATUS_LINE_FILE_GROUP = "workingSetStatusLineFileGroup"; //$NON-NLS-1$
+    private static final String WORKING_SET_STATUS_LINE_PROGRESS_GROUP = "workingSetStatusLineProgressGroup"; //$NON-NLS-1$
+    private static final String WORKING_SET_STATUS_LINE_NETWORK_GROUP = "workingSetStatusLineNetworkGroup"; //$NON-NLS-1$
+    private static final String WORKING_SET_STATUS_LINE_DESIGN_GROUP = "workingSetStatusLineDesignGroup"; //$NON-NLS-1$
+
     // Actions - important to allocate these only in makeActions, and then use
     // them
     // in the fill methods. This ensures that the actions aren't recreated
@@ -39,7 +44,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     private IWorkbenchAction newWindowAction;
     private OpenViewAction openViewAction;
     private Action messagePopupAction;
-    private IWorkbenchWindow window;
+    private IWorkbenchAction openPerspectiveAction;
+    private IWorkbenchAction resetPerspectiveAction;
 
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer)
     {
@@ -48,7 +54,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
     protected void makeActions(final IWorkbenchWindow window)
     {
-        this.window = window;
         // Creates the actions and registers them.
         // Registering is needed to ensure that key bindings work.
         // The corresponding commands keybindings are defined in the plugin.xml
@@ -58,6 +63,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
         exitAction = ActionFactory.QUIT.create(window);
         register(exitAction);
+
+        openPerspectiveAction = ActionFactory.OPEN_PERSPECTIVE_DIALOG.create(window);
+        register(openPerspectiveAction);
+        resetPerspectiveAction = ActionFactory.RESET_PERSPECTIVE.create(window);
+        register(resetPerspectiveAction);
 
         aboutAction = ActionFactory.ABOUT.create(window);
         register(aboutAction);
@@ -75,9 +85,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     protected void fillMenuBar(IMenuManager menuBar)
     {
         MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
+        MenuManager windowMenu = new MenuManager("&Window", IWorkbenchActionConstants.M_WINDOW);
         MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
 
         menuBar.add(fileMenu);
+        menuBar.add(windowMenu);
         // Add a group marker indicating where action set menus will appear.
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menuBar.add(helpMenu);
@@ -89,6 +101,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         fileMenu.add(openViewAction);
         fileMenu.add(new Separator());
         fileMenu.add(exitAction);
+
+        // Window
+        windowMenu.add(openPerspectiveAction);
+        windowMenu.add(new Separator());
+        windowMenu.add(resetPerspectiveAction);
 
         // Help
         helpMenu.add(aboutAction);
@@ -105,7 +122,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     @Override
     protected void fillStatusLine(IStatusLineManager statusLine)
     {
+        statusLine.add(new Separator(WORKING_SET_STATUS_LINE_FILE_GROUP));
+        statusLine.appendToGroup(WORKING_SET_STATUS_LINE_FILE_GROUP, new Separator());
         super.fillStatusLine(statusLine);
     }
-
 }

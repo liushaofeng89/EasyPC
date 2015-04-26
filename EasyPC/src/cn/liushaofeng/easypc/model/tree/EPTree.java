@@ -15,6 +15,18 @@ public class EPTree
     private List<EPTree> children = new ArrayList<EPTree>();
     private Object data;
 
+    /**
+     * defualt constructor
+     */
+    public EPTree()
+    {
+
+    }
+
+    /**
+     * constructor with parameter
+     * @param obj data object
+     */
     public EPTree(Object obj)
     {
         this.data = obj;
