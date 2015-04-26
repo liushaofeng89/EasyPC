@@ -15,6 +15,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
@@ -34,8 +36,8 @@ import cn.liushaofeng.easypc.views.provider.FileTreeLabelProvider;
 public class FileExplorerView extends ViewPart
 {
     public static final String ID = "cn.liushaofeng.easypc.views.fileexplorerview";
-    public static final String NAME = "资源管理器";
-    public static final String TIPS = "资源管理器";
+    public static final String NAME = "File Explorer"; //$NON-NLS-1$
+    public static final String TIPS = "File Explorer"; //$NON-NLS-1$
 
     private TreeViewer fileTree = null;
     private Vector<String> supportEditExtension = new Vector<String>();// 可以被文本编辑器打开的文件类型
@@ -49,6 +51,7 @@ public class FileExplorerView extends ViewPart
         supportEditExtension.add("txt");
         supportEditExtension.add("xml");
         supportEditExtension.add("log");
+        supportEditExtension.add("ini");
     }
 
     @Override
@@ -87,7 +90,6 @@ public class FileExplorerView extends ViewPart
         });
         fileTree.getTree().addSelectionListener(new SelectionAdapter()
         {
-
             @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
@@ -95,20 +97,25 @@ public class FileExplorerView extends ViewPart
                 File file = (File) treeItem.getData();
                 if (supportEdit(file))
                 {
-                    TextEditorInput textEditorInput = new TextEditorInput(file.getName());
+                    TextEditorInput textEditorInput = new TextEditorInput(file);
                     try
                     {
-                        getViewSite().getWorkbenchWindow().getActivePage()
-                            .openEditor(textEditorInput, TextEditor.ID);
+                        IWorkbenchPage activePage = getViewSite().getWorkbenchWindow().getActivePage();
+                        IEditorPart findEditor = activePage.findEditor(textEditorInput);
+                        if (findEditor != null)
+                        {
+                            findEditor.setFocus();
+                        } else
+                        {
+                            activePage.openEditor(textEditorInput, TextEditor.ID);
+                        }
                     } catch (PartInitException e1)
                     {
                         Logger.getLogger(this.getClass()).error(e1.getMessage(), e1);
                     }
                 }
             }
-
         });
-
     }
 
     @Override

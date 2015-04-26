@@ -70,17 +70,17 @@
       </view>
    </extension>
    
-   <extension
+ 	<extension
          point="org.eclipse.ui.editors">
-      <view
-            name="Text Editor"
-            default="false"
-            contributorClass="cn.liushaofeng.easypc.editors.contributors.TextEditorContributor"
-            icon="icons/console.gif"
+      <editor
             class="cn.liushaofeng.easypc.editors.TextEditor"
-            id="cn.liushaofeng.easypc.editors.texteditorview">
-      </view>
-   </extension>
+            contributorClass="cn.liushaofeng.easypc.editors.contributors.TextEditorContributor"
+            default="false"
+            icon="icons/obj_text.gif"
+            id="cn.liushaofeng.easypc.editors.texteditorview"
+            name="Text Editor">
+      </editor>
+   	</extension>
    
    
    
@@ -141,5 +141,6 @@
          </property>
       </product>
    </extension>
+  
 
 </plugin>

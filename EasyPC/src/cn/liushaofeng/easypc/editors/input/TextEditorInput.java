@@ -5,6 +5,7 @@ import java.io.File;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.ISharedImages;
 
 import cn.liushaofeng.easypc.app.Activator;
 
@@ -16,17 +17,16 @@ import cn.liushaofeng.easypc.app.Activator;
  */
 public class TextEditorInput implements IEditorInput
 {
-    private String input;
+    private File file;
 
-    public TextEditorInput(String input)
+    public TextEditorInput(File file)
     {
-        this.input = input;
+        this.file = file;
     }
 
     @Override
     public Object getAdapter(Class adapter)
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -39,13 +39,13 @@ public class TextEditorInput implements IEditorInput
     @Override
     public ImageDescriptor getImageDescriptor()
     {
-        return Activator.getImageDescriptor("icons" + File.separator + "home.gif");
+        return Activator.getSysImageDescriptor(ISharedImages.IMG_OBJ_FILE);
     }
 
     @Override
     public String getName()
     {
-        return input;
+        return file.getName();
     }
 
     @Override
@@ -58,7 +58,12 @@ public class TextEditorInput implements IEditorInput
     @Override
     public String getToolTipText()
     {
-        return input;
+        return file.getName();
+    }
+
+    public File getFile()
+    {
+        return file;
     }
 
 }

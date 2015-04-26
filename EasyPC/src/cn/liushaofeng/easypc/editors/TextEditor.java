@@ -1,5 +1,10 @@
 package cn.liushaofeng.easypc.editors;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -12,6 +17,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+
+import cn.liushaofeng.easypc.editors.input.TextEditorInput;
 
 /**
  * Text Editor
@@ -26,18 +33,22 @@ public class TextEditor extends EditorPart
     private Text text;
     private boolean isDirty;
 
+    private TextEditorInput TextEditorInput;
+
     @Override
     public void init(IEditorSite site, IEditorInput input) throws PartInitException
     {
         this.setSite(site);
         this.setInput(input);
         this.setPartName(input.getName());
+        this.TextEditorInput = (TextEditorInput) input;
     }
 
     @Override
     public void createPartControl(Composite arg0)
     {
-        text = new Text(arg0, SWT.NONE);
+        text = new Text(arg0, SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI);
+        initValToText(TextEditorInput);
         text.addModifyListener(new ModifyListener()
         {
             @Override
@@ -51,7 +62,6 @@ public class TextEditor extends EditorPart
                 }
             }
         });
-
     }
 
     @Override
@@ -109,4 +119,41 @@ public class TextEditor extends EditorPart
         text.setFocus();
     }
 
+    private void initValToText(IEditorInput input)
+    {
+        if (input instanceof TextEditorInput)
+        {
+            TextEditorInput textInput = (TextEditorInput) input;
+            BufferedReader bufferedReader = null;
+            try
+            {
+                bufferedReader = new BufferedReader(new FileReader(textInput.getFile()));
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    text.append(line + System.getProperty("line.separator"));
+                }
+            } catch (FileNotFoundException e)
+            {
+                Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+            } catch (IOException e)
+            {
+                Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+            } finally
+            {
+                if (bufferedReader != null)
+                {
+                    try
+                    {
+                        bufferedReader.close();
+                    } catch (IOException e)
+                    {
+                        Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+                    }
+                    bufferedReader = null;
+                }
+            }
+
+        }
+    }
 }
