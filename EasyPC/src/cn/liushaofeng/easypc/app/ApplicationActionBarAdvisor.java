@@ -42,7 +42,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     private IWorkbenchAction exitAction;
     private IWorkbenchAction aboutAction;
     private IWorkbenchAction newWindowAction;
-    private OpenViewAction openViewAction;
+    private IWorkbenchAction saveAction;
     private Action messagePopupAction;
     private IWorkbenchAction openPerspectiveAction;
     private IWorkbenchAction resetPerspectiveAction;
@@ -75,9 +75,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
         register(newWindowAction);
 
-        openViewAction = new OpenViewAction(window, "Open Another Message View", View.ID);
-        register(openViewAction);
-
+        saveAction = ActionFactory.SAVE.create(window);
+        register(saveAction);
+        
         messagePopupAction = new MessagePopupAction("Open Message", window);
         register(messagePopupAction);
     }
@@ -98,7 +98,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         fileMenu.add(newWindowAction);
         fileMenu.add(new Separator());
         fileMenu.add(messagePopupAction);
-        fileMenu.add(openViewAction);
+        fileMenu.add(saveAction);
         fileMenu.add(new Separator());
         fileMenu.add(exitAction);
 
@@ -115,7 +115,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     {
         IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
         coolBar.add(new ToolBarContributionItem(toolbar, "main"));
-        toolbar.add(openViewAction);
+        toolbar.add(saveAction);
         toolbar.add(messagePopupAction);
     }
 

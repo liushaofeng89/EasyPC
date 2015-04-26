@@ -52,6 +52,8 @@ public class FileExplorerView extends ViewPart
         supportEditExtension.add("xml");
         supportEditExtension.add("log");
         supportEditExtension.add("ini");
+        supportEditExtension.add("html");
+        supportEditExtension.add("htm");
     }
 
     @Override
