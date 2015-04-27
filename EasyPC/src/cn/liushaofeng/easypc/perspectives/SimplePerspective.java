@@ -7,6 +7,8 @@ import org.eclipse.ui.IPerspectiveFactory;
 import cn.liushaofeng.easypc.views.ConsoleView;
 import cn.liushaofeng.easypc.views.ContactView;
 import cn.liushaofeng.easypc.views.FileExplorerView;
+import cn.liushaofeng.easypc.views.HardwareInfoView;
+import cn.liushaofeng.easypc.views.SoftwareInfoView;
 
 /**
  * 普通用户透视图
@@ -30,6 +32,12 @@ public class SimplePerspective implements IPerspectiveFactory
         createFolder.addView(ContactView.ID);
         createFolder.addPlaceholder(FileExplorerView.ID);
         createFolder.addPlaceholder(ContactView.ID);
+
+        IFolderLayout rightFolder = layout.createFolder("right", IPageLayout.RIGHT, 0.275f, editorArea);
+        rightFolder.addView(SoftwareInfoView.ID);
+        rightFolder.addView(HardwareInfoView.ID);
+        rightFolder.addPlaceholder(SoftwareInfoView.ID);
+        rightFolder.addPlaceholder(HardwareInfoView.ID);
 
         layout.addView(ConsoleView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
     }

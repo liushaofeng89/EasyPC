@@ -20,22 +20,6 @@ public class TextEditorContributor extends EditorActionBarContributor
     @Override
     public void contributeToMenu(IMenuManager menuManager)
     {
-        IContributionItem[] items = menuManager.getItems();
-        for (IContributionItem iContributionItem : items)
-        {
-            MenuManager manager = (MenuManager) iContributionItem;
-            if (IWorkbenchActionConstants.M_FILE.equals(iContributionItem.getId()))
-            {
-                IContributionItem[] items2 = manager.getItems();
-                for (IContributionItem iContributionItem2 : items2)
-                {
-                    if (IWorkbenchActionConstants.SAVE.equals(iContributionItem2.getId()))
-                    {
-
-                    }
-                }
-            }
-        }
     }
 
     @Override

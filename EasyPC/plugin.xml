@@ -59,6 +59,29 @@
             id="cn.liushaofeng.easypc.views.contactview">
       </view>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Software infomation"
+            allowMultiple="true"
+            icon="icons/contact.gif"
+            class="cn.liushaofeng.easypc.views.SoftwareInfoView"
+            id="cn.liushaofeng.easypc.views.softwareinfoview">
+      </view>
+   </extension>
+   
+    <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Hardware infomation"
+            allowMultiple="true"
+            icon="icons/contact.gif"
+            class="cn.liushaofeng.easypc.views.HardwareInfoView"
+            id="cn.liushaofeng.easypc.views.hardwareinfoview">
+      </view>
+   </extension>
+   
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -69,6 +92,7 @@
             id="cn.liushaofeng.easypc.views.consoleview">
       </view>
    </extension>
+   
    
  	<extension
          point="org.eclipse.ui.editors">
