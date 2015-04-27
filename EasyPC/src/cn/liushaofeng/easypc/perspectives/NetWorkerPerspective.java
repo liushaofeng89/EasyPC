@@ -3,6 +3,8 @@ package cn.liushaofeng.easypc.perspectives;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
+import cn.liushaofeng.easypc.views.ConsoleView;
+
 /**
  * 网络工程师透视图
  * @author liushaofeng
@@ -20,6 +22,10 @@ public class NetWorkerPerspective implements IPerspectiveFactory
     @Override
     public void createInitialLayout(IPageLayout layout)
     {
+        String editorArea = layout.getEditorArea();
+        layout.setEditorAreaVisible(true);
+
+        layout.addView(ConsoleView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
     }
 
 }

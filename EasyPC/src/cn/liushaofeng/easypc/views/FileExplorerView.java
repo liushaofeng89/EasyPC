@@ -47,7 +47,6 @@ public class FileExplorerView extends ViewPart
      */
     public FileExplorerView()
     {
-
         supportEditExtension.add("txt");
         supportEditExtension.add("xml");
         supportEditExtension.add("log");

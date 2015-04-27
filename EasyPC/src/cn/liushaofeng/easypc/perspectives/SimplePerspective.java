@@ -4,7 +4,6 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import cn.liushaofeng.easypc.views.ConsoleView;
 import cn.liushaofeng.easypc.views.ContactView;
 import cn.liushaofeng.easypc.views.FileExplorerView;
 import cn.liushaofeng.easypc.views.HardwareInfoView;
@@ -27,19 +26,15 @@ public class SimplePerspective implements IPerspectiveFactory
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(true);
 
-        IFolderLayout createFolder = layout.createFolder("left", IPageLayout.LEFT, 0.25f, editorArea);
-        createFolder.addView(FileExplorerView.ID);
-        createFolder.addView(ContactView.ID);
-        createFolder.addPlaceholder(FileExplorerView.ID);
-        createFolder.addPlaceholder(ContactView.ID);
+        layout.addView(FileExplorerView.ID, IPageLayout.LEFT, 0.25f, editorArea);
 
-        IFolderLayout rightFolder = layout.createFolder("right", IPageLayout.RIGHT, 0.275f, editorArea);
+        IFolderLayout rightFolder = layout.createFolder("right", IPageLayout.RIGHT, 0.25f, editorArea);
         rightFolder.addView(SoftwareInfoView.ID);
         rightFolder.addView(HardwareInfoView.ID);
         rightFolder.addPlaceholder(SoftwareInfoView.ID);
         rightFolder.addPlaceholder(HardwareInfoView.ID);
 
-        layout.addView(ConsoleView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
+        layout.addView(ContactView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
     }
 
 }
