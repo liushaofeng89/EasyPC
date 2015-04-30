@@ -28,11 +28,11 @@ public class SimplePerspective implements IPerspectiveFactory
 
         layout.addView(FileExplorerView.ID, IPageLayout.LEFT, 0.25f, editorArea);
 
-        IFolderLayout rightFolder = layout.createFolder("right", IPageLayout.RIGHT, 0.25f, editorArea);
-        rightFolder.addView(SoftwareInfoView.ID);
+        IFolderLayout rightFolder = layout.createFolder("right", IPageLayout.RIGHT, 0.75f, editorArea);
         rightFolder.addView(HardwareInfoView.ID);
-        rightFolder.addPlaceholder(SoftwareInfoView.ID);
+        rightFolder.addView(SoftwareInfoView.ID);
         rightFolder.addPlaceholder(HardwareInfoView.ID);
+        rightFolder.addPlaceholder(SoftwareInfoView.ID);
 
         layout.addView(ContactView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
     }

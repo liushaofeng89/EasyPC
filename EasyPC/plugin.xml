@@ -150,18 +150,18 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="EasyPC.application"
-            name="Let our PC more easy……">
+            name="Easy PC">
          <property
                name="aboutText"
-               value="RCP Mail template created by PDE">
+               value="%aboutText">
          </property>
          <property
                name="windowImages"
-               value="icons/sample2.gif">
+               value="icons/EasyPC_16x16.gif">
          </property>
          <property
                name="aboutImage"
-               value="product_lg.gif">
+               value="icons/product_lg.gif">
          </property>
       </product>
    </extension>
