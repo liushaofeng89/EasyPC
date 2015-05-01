@@ -18,9 +18,8 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
+import cn.liushaofeng.easypc.actions.ComputerInfoAction;
 import easypc.MessagePopupAction;
-import easypc.OpenViewAction;
-import easypc.View;
 
 /**
  * An action bar advisor is responsible for creating, adding, and disposing of
@@ -46,6 +45,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     private Action messagePopupAction;
     private IWorkbenchAction openPerspectiveAction;
     private IWorkbenchAction resetPerspectiveAction;
+
+    // user define actions
+    private ComputerInfoAction computerInfoAction;
 
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer)
     {
@@ -77,9 +79,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
         saveAction = ActionFactory.SAVE.create(window);
         register(saveAction);
-        
+
         messagePopupAction = new MessagePopupAction("Open Message", window);
         register(messagePopupAction);
+
+        computerInfoAction = new ComputerInfoAction();
+        register(computerInfoAction);
     }
 
     protected void fillMenuBar(IMenuManager menuBar)
@@ -116,7 +121,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
         coolBar.add(new ToolBarContributionItem(toolbar, "main"));
         toolbar.add(saveAction);
-        toolbar.add(messagePopupAction);
+        toolbar.add(computerInfoAction);
     }
 
     @Override
