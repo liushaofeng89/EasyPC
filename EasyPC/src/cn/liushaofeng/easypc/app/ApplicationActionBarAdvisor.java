@@ -18,7 +18,7 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
-import cn.liushaofeng.easypc.actions.ComputerInfoAction;
+import cn.liushaofeng.easypc.actions.SystemInfoAction;
 import easypc.MessagePopupAction;
 
 /**
@@ -47,7 +47,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     private IWorkbenchAction resetPerspectiveAction;
 
     // user define actions
-    private ComputerInfoAction computerInfoAction;
+    private SystemInfoAction computerInfoAction;
 
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer)
     {
@@ -83,8 +83,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         messagePopupAction = new MessagePopupAction("Open Message", window);
         register(messagePopupAction);
 
-        computerInfoAction = new ComputerInfoAction();
-        register(computerInfoAction);
+        computerInfoAction = new SystemInfoAction();
     }
 
     protected void fillMenuBar(IMenuManager menuBar)
