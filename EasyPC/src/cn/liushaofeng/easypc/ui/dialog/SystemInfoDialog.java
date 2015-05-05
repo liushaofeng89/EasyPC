@@ -4,7 +4,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -112,80 +111,57 @@ public class SystemInfoDialog extends Dialog
         Composite composite = new Composite(tabFolder, SWT.NONE);
         composite.setLayout(new GridLayout(2, false));
 
-        GridData nameLabelLayoutData = new GridData(SWT.END, SWT.FILL, true, false, 0x1, 0x1);
-        GridData valLabelLayoutData = new GridData(SWT.BEGINNING, SWT.FILL, true, false, 0x1, 0x1);
-
         Label systemNameLabel = new Label(composite, SWT.NONE);
         systemNameLabel.setText(TAB_ITEM_OVERVIEW_SYSTEM_MODE);
-        // systemNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label systemValLabel = new Label(composite, SWT.NONE);
-        systemValLabel.setLayoutData(valLabelLayoutData);
 
         Label osNameLabel = new Label(composite, SWT.NONE);
         osNameLabel.setText(TAB_ITEM_OVERVIEW_OPERATE_SYSTEM);
-        // osNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label osValLabel = new Label(composite, SWT.NONE);
         osValLabel.setText(SystemUtil.getOSName());
-        osValLabel.setLayoutData(valLabelLayoutData);
 
         Label cputNameLabel = new Label(composite, SWT.NONE);
         cputNameLabel.setText(TAB_ITEM_OVERVIEW_CPU);
-        // cputNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label cpuValLabel = new Label(composite, SWT.NONE);
         cpuValLabel.setText(SystemUtil.getCPUName());
-        cpuValLabel.setLayoutData(valLabelLayoutData);
 
         Label mainboardNameLabel = new Label(composite, SWT.NONE);
         mainboardNameLabel.setText(TAB_ITEM_OVERVIEW_MAIN_BOARD);
-        // mainboardNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label mainboardValLabel = new Label(composite, SWT.NONE);
-        // mainboardValLabel.setLayoutData(valLabelLayoutData);
 
         Label memoryNameLabel = new Label(composite, SWT.NONE);
         memoryNameLabel.setText(TAB_ITEM_OVERVIEW_MEMORY);
-        // memoryNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label memoryValLabel = new Label(composite, SWT.NONE);
-        // memoryValLabel.setLayoutData(valLabelLayoutData);
 
         Label diskNameLabel = new Label(composite, SWT.NONE);
         diskNameLabel.setText(TAB_ITEM_OVERVIEW_MAIN_DISK);
-        // diskNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label diskValLabel = new Label(composite, SWT.NONE);
-        // diskValLabel.setLayoutData(valLabelLayoutData);
 
         Label graphicsNameLabel = new Label(composite, SWT.NONE);
         graphicsNameLabel.setText(TAB_ITEM_OVERVIEW_GRAPHICS);
-        // graphicsNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label graphicsValLabel = new Label(composite, SWT.NONE);
-        // graphicsValLabel.setLayoutData(valLabelLayoutData);
 
         Label monitorNameLabel = new Label(composite, SWT.NONE);
         monitorNameLabel.setText(TAB_ITEM_OVERVIEW_MONITOR);
-        // monitorNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label monitorValLabel = new Label(composite, SWT.NONE);
-        // monitorValLabel.setLayoutData(valLabelLayoutData);
 
         Label audioNameLabel = new Label(composite, SWT.NONE);
         audioNameLabel.setText(TAB_ITEM_OVERVIEW_AUDIO_CARD);
-        // audioNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label audioValLabel = new Label(composite, SWT.NONE);
-        // audioValLabel.setLayoutData(valLabelLayoutData);
 
         Label networkNameLabel = new Label(composite, SWT.NONE);
         networkNameLabel.setText(TAB_ITEM_OVERVIEW_NETWORD_CARD);
-        // networkNameLabel.setLayoutData(nameLabelLayoutData);
 
         Label networkValLabel = new Label(composite, SWT.NONE);
-        // networkValLabel.setLayoutData(valLabelLayoutData);
 
         return composite;
     }

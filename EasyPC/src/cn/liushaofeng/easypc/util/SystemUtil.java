@@ -44,6 +44,6 @@ public final class SystemUtil
             Logger.getLogger(SystemUtil.class).error(e.getMessage(), e);
         }
         org.hyperic.sigar.CpuInfo info = infos[0];
-        return info.getVendor() + info.getModel() + "(" + info.getMhz() + ")";
+        return info.getVendor() + " " + info.getModel() + "(" + info.getMhz() + ")";
     }
 }
