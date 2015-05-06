@@ -59,6 +59,16 @@
             id="cn.liushaofeng.easypc.views.contactview">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Process"
+            allowMultiple="true"
+            icon="icons/contact.gif"
+            class="cn.liushaofeng.easypc.views.ProcessView"
+            id="cn.liushaofeng.easypc.views.processview">
+      </view>
+   </extension>
    
    <extension
          point="org.eclipse.ui.views">

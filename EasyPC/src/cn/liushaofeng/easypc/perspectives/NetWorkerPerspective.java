@@ -1,9 +1,11 @@
 package cn.liushaofeng.easypc.perspectives;
 
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import cn.liushaofeng.easypc.views.ConsoleView;
+import cn.liushaofeng.easypc.views.ProcessView;
 
 /**
  * 网络工程师透视图
@@ -25,7 +27,11 @@ public class NetWorkerPerspective implements IPerspectiveFactory
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(true);
 
-        layout.addView(ConsoleView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
+        IFolderLayout rightFolder = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.75f, editorArea);
+        rightFolder.addView(ConsoleView.ID);
+        rightFolder.addView(ProcessView.ID);
+        rightFolder.addPlaceholder(ConsoleView.ID);
+        rightFolder.addPlaceholder(ProcessView.ID);
     }
 
 }
