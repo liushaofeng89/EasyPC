@@ -173,6 +173,10 @@
                name="aboutImage"
                value="icons/product_lg.gif">
          </property>
+         <property
+               name="appName"
+               value="Easy PC">
+         </property>
       </product>
    </extension>
   
