@@ -12,3 +12,4 @@ Bundle-Localization: plugin
 Bundle-ClassPath: libs/log4j-1.2.17.jar,
  .,
  libs/sigar.jar
+Bundle-Vendor: liushaofeng.cn

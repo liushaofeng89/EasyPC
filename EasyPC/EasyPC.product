@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Easy PC" uid="cn.liushaofeng.easypc" id="EasyPC.product" application="EasyPC.application" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="Easy PC" uid="cn.liushaofeng.easypc" id="EasyPC.product" application="EasyPC.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/product_lg.gif"/>
@@ -17,10 +17,20 @@
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="icons/EasyPC_16x16.gif"/>
+   <windowImages i16="icons/EasyPC_16x16.gif" i32="icons/EasyPC_32x32.gif" i48="icons/EasyPC_48x48.gif" i64="icons/EasyPC_64x64.gif" i128="icons/EasyPC_128x128.gif"/>
 
    <splash
       location="EasyPC" />
+   <launcher name="EasyPC">
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+
+   <vm>
+   </vm>
 
 
    <plugins>
