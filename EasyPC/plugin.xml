@@ -180,6 +180,33 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="EasyPC.intro">
+      </intro>
+      <introProductBinding
+            introId="EasyPC.intro"
+            productId="EasyPC.product">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="introContent.xml"
+            id="EasyPC.introConfigId"
+            introId="EasyPC.intro">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx"
+                  style="content/shared.css">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
   
 
 </plugin>

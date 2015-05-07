@@ -39,6 +39,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     // in the fill methods. This ensures that the actions aren't recreated
     // when fillActionBars is called with FILL_PROXY.
     private IWorkbenchAction exitAction;
+    private IWorkbenchAction introAction;
     private IWorkbenchAction aboutAction;
     private IWorkbenchAction newWindowAction;
     private IWorkbenchAction saveAction;
@@ -73,6 +74,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
         aboutAction = ActionFactory.ABOUT.create(window);
         register(aboutAction);
+        
+        introAction = ActionFactory.INTRO.create(window);
+        register(introAction);
 
         newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);
         register(newWindowAction);
@@ -113,6 +117,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
         // Help
         helpMenu.add(aboutAction);
+        helpMenu.add(introAction);
     }
 
     protected void fillCoolBar(ICoolBarManager coolBar)
