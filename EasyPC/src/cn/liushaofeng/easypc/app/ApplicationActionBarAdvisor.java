@@ -74,7 +74,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
         aboutAction = ActionFactory.ABOUT.create(window);
         register(aboutAction);
-        
+
         introAction = ActionFactory.INTRO.create(window);
         register(introAction);
 
@@ -117,6 +117,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
         // Help
         helpMenu.add(aboutAction);
+        helpMenu.add(new Separator());
         helpMenu.add(introAction);
     }
 
