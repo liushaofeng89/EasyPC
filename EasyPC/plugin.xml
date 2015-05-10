@@ -104,6 +104,17 @@
       </view>
    </extension>
    
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Http Look"
+            allowMultiple="true"
+            icon="icons/console.gif"
+            class="cn.liushaofeng.easypc.views.HttpLookView"
+            id="cn.liushaofeng.easypc.views.httplookview">
+      </view>
+   </extension>
+   
    
  	<extension
          point="org.eclipse.ui.editors">

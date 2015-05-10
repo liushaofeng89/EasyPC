@@ -88,6 +88,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         register(messagePopupAction);
 
         computerInfoAction = new SystemInfoAction();
+
     }
 
     protected void fillMenuBar(IMenuManager menuBar)
