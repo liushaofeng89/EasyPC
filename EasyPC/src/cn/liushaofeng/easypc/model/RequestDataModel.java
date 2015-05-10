@@ -8,5 +8,7 @@ package cn.liushaofeng.easypc.model;
  */
 public class RequestDataModel
 {
-
+    private String requestTime;
+    
+    
 }

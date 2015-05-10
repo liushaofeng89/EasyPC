@@ -8,5 +8,5 @@ package cn.liushaofeng.easypc.model;
  */
 public class ResponseDataModel
 {
-
+    private String responseTime;
 }

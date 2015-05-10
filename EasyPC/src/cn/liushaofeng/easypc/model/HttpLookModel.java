@@ -8,23 +8,12 @@ package cn.liushaofeng.easypc.model;
  */
 public class HttpLookModel
 {
-    private String requestTime;
     private String sourceMAC;
     private String targetMAC;
     private String sourceIP;
     private String targetIP;
     private RequestDataModel requestData;
     private ResponseDataModel responseData;
-
-    public String getRequestTime()
-    {
-        return requestTime;
-    }
-
-    public void setRequestTime(String requestTime)
-    {
-        this.requestTime = requestTime;
-    }
 
     public String getSourceMAC()
     {
