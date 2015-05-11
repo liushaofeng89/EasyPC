@@ -109,7 +109,7 @@
       <view
             name="Http Look"
             allowMultiple="true"
-            icon="icons/console.gif"
+            icon="icons/httplook.gif"
             class="cn.liushaofeng.easypc.views.HttpLookView"
             id="cn.liushaofeng.easypc.views.httplookview">
       </view>

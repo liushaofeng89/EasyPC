@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -15,11 +16,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+import cn.liushaofeng.easypc.actions.CleanUpAction;
 import cn.liushaofeng.easypc.app.Activator;
 import cn.liushaofeng.easypc.editors.TextEditor;
 import cn.liushaofeng.easypc.editors.input.TextEditorInput;
@@ -28,7 +31,7 @@ import cn.liushaofeng.easypc.views.provider.FileTreeContentProvider;
 import cn.liushaofeng.easypc.views.provider.FileTreeLabelProvider;
 
 /**
- * 资源管理器视图
+ * file resource manager view
  * @author liushaofeng
  * @date 2015年4月24日
  * @version 1.0.0
@@ -39,6 +42,7 @@ public class FileExplorerView extends ViewPart
     public static final String NAME = "File Explorer"; //$NON-NLS-1$
     public static final String TIPS = "File Explorer"; //$NON-NLS-1$
 
+    private CleanUpAction cleanAction = new CleanUpAction();
     private TreeViewer fileTree = null;
     private Vector<String> supportEditExtension = new Vector<String>();// 可以被文本编辑器打开的文件类型
 
@@ -117,6 +121,9 @@ public class FileExplorerView extends ViewPart
                 }
             }
         });
+
+        // 创建action bar和menu bar
+        contributeToActionBars();
     }
 
     @Override
@@ -140,5 +147,17 @@ public class FileExplorerView extends ViewPart
     private boolean supportEdit(File f)
     {
         return supportEditExtension.contains(f.getName().substring(f.getName().lastIndexOf(".") + 1));
+    }
+
+    // create menu and toolbar
+    private void contributeToActionBars()
+    {
+        IActionBars actionBars = getViewSite().getActionBars();
+        fillToolsBar(actionBars.getToolBarManager());
+    }
+
+    private void fillToolsBar(IToolBarManager toolBarManager)
+    {
+        toolBarManager.add(cleanAction);
     }
 }

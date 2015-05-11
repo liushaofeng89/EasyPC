@@ -18,7 +18,7 @@ public class StartHttpLookAction extends Action
 
     public StartHttpLookAction()
     {
-        super(ACTION_TEXT_START, Activator.getImageDescriptor("icons" + File.separator + "start.gif"));
+        super(ACTION_TEXT_START, Activator.getImageDescriptor("icons" + File.separator + "run.gif"));
     }
 
     @Override

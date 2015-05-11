@@ -23,7 +23,7 @@ public class SimplePerspective implements IPerspectiveFactory
         String editorArea = layout.getEditorArea();
         layout.setEditorAreaVisible(true);
 
-        layout.addView(FileExplorerView.ID, IPageLayout.LEFT, 0.25f, editorArea);
+        layout.addView(FileExplorerView.ID, IPageLayout.LEFT, 0.30f, editorArea);
 
         layout.addView(ContactView.ID, IPageLayout.BOTTOM, 0.66f, editorArea);
     }

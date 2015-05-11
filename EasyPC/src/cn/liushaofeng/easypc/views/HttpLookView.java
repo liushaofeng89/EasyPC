@@ -30,9 +30,9 @@ public class HttpLookView extends ViewPart
     public void createPartControl(Composite parent)
     {
         this.httplookTreeView = new TreeViewer(parent, SWT.BORDER);
-        httplookTreeView.setContentProvider(null);
-        httplookTreeView.setLabelProvider(null);
-        httplookTreeView.setInput(new ArrayList<HttpLookModel>());
+        // httplookTreeView.setContentProvider(null);
+        // httplookTreeView.setLabelProvider(null);
+        // httplookTreeView.setInput(new ArrayList<HttpLookModel>());
 
         // create menu and cool item
         contributeToActionBars();
@@ -48,7 +48,6 @@ public class HttpLookView extends ViewPart
     // create menu and toolbar
     private void contributeToActionBars()
     {
-
         IActionBars actionBars = getViewSite().getActionBars();
         fillToolsBar(actionBars.getToolBarManager());
         fillDropdownMenu(actionBars.getMenuManager());
