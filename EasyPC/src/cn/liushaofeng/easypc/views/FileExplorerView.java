@@ -11,6 +11,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -27,6 +30,8 @@ import cn.liushaofeng.easypc.app.Activator;
 import cn.liushaofeng.easypc.editors.TextEditor;
 import cn.liushaofeng.easypc.editors.input.TextEditorInput;
 import cn.liushaofeng.easypc.util.FileUtil;
+import cn.liushaofeng.easypc.views.listener.FileDragListener;
+import cn.liushaofeng.easypc.views.listener.FileDropListener;
 import cn.liushaofeng.easypc.views.provider.FileTreeContentProvider;
 import cn.liushaofeng.easypc.views.provider.FileTreeLabelProvider;
 
@@ -43,7 +48,7 @@ public class FileExplorerView extends ViewPart
     public static final String TIPS = "File Explorer"; //$NON-NLS-1$
 
     private CleanUpAction cleanAction = new CleanUpAction();
-    private TreeViewer fileTree = null;
+    private TreeViewer fileTreeViewer = null;
     private Vector<String> supportEditExtension = new Vector<String>();// 可以被文本编辑器打开的文件类型
 
     /**
@@ -80,11 +85,15 @@ public class FileExplorerView extends ViewPart
     @Override
     public void createPartControl(Composite parent)
     {
-        fileTree = new TreeViewer(parent, SWT.NONE);
-        fileTree.setContentProvider(new FileTreeContentProvider());
-        fileTree.setLabelProvider(new FileTreeLabelProvider());
-        fileTree.setInput(File.listRoots());
-        fileTree.addSelectionChangedListener(new ISelectionChangedListener()
+        fileTreeViewer = new TreeViewer(parent, SWT.NONE);
+        fileTreeViewer.setContentProvider(new FileTreeContentProvider());
+        fileTreeViewer.setLabelProvider(new FileTreeLabelProvider());
+        fileTreeViewer.setInput(File.listRoots());
+        fileTreeViewer.addDragSupport(DND.DROP_MOVE, new Transfer[]
+        { FileTransfer.getInstance() }, new FileDragListener(fileTreeViewer));
+        fileTreeViewer.addDropSupport(DND.DROP_MOVE | DND.DROP_DEFAULT, new Transfer[]
+        { FileTransfer.getInstance() }, new FileDropListener(fileTreeViewer));
+        fileTreeViewer.addSelectionChangedListener(new ISelectionChangedListener()
         {
             @Override
             public void selectionChanged(SelectionChangedEvent arg0)
@@ -93,7 +102,7 @@ public class FileExplorerView extends ViewPart
                 updateStatusLine((File) selection.getFirstElement());
             }
         });
-        fileTree.getTree().addSelectionListener(new SelectionAdapter()
+        fileTreeViewer.getTree().addSelectionListener(new SelectionAdapter()
         {
             @Override
             public void widgetDefaultSelected(SelectionEvent e)
@@ -134,8 +143,11 @@ public class FileExplorerView extends ViewPart
 
     private void updateStatusLine(File file)
     {
-        IStatusLineManager statusLineManager = getViewSite().getActionBars().getStatusLineManager();
-        statusLineManager.setMessage(file.getPath() + getShowSize(file));
+        if (file != null)
+        {
+            IStatusLineManager statusLineManager = getViewSite().getActionBars().getStatusLineManager();
+            statusLineManager.setMessage(file.getPath() + getShowSize(file));
+        }
     }
 
     private String getShowSize(File file)

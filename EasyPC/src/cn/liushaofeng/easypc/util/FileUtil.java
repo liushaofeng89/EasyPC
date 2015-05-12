@@ -1,9 +1,14 @@
 package cn.liushaofeng.easypc.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.log4j.Logger;
 
 /**
- * 文件工具类
+ * File utils
  * @author liushaofeng
  * @date 2015年4月26日
  * @version 1.0.0
@@ -21,6 +26,67 @@ public final class FileUtil
     private FileUtil()
     {
 
+    }
+
+    /**
+     * delete file
+     * @param path the file need to delete
+     * @return delete success or not
+     */
+    public static final boolean deleteFile(String path)
+    {
+        return deleteFile(new File(path));
+    }
+
+    /**
+     * delete file
+     * @param file the file need to delete
+     * @return delete file success or not
+     */
+    public static final boolean deleteFile(File file)
+    {
+        if (file.exists())
+        {
+            return file.delete();
+        }
+        return false;
+    }
+
+    /**
+     * copy a file to anther
+     * @param srcFile source file
+     * @param desFile target file
+     * @return copy success or not
+     */
+    public static boolean copyFile(File srcFile, File desFile)
+    {
+        int length = 2097152;
+        FileOutputStream out = null;
+        FileInputStream in = null;
+        try
+        {
+            in = new FileInputStream(srcFile);
+            out = new FileOutputStream(desFile);
+            byte[] buffer = new byte[length];
+            while (true)
+            {
+                int ins = in.read(buffer);
+                if (ins == -1)
+                {
+                    in.close();
+                    out.flush();
+                    out.close();
+                    return true;
+                } else
+                {
+                    out.write(buffer, 0, ins);
+                }
+            }
+        } catch (IOException e)
+        {
+            Logger.getLogger(FileUtil.class).error(e.getMessage(), e);
+            return false;
+        }
     }
 
     /**
