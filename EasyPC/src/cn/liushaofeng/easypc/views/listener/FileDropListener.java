@@ -56,18 +56,17 @@ public class FileDropListener implements DropTargetListener
         }
         if (FileTransfer.getInstance().isSupportedType(event.currentDataType))
         {
-            File targetFile = (File) event.item.getData();
-            File parentFile = targetFile.isDirectory() ? targetFile : targetFile.getParentFile();
-
             String[] files = (String[]) event.data;
             for (String string : files)
             {
                 File srcFile = new File(string);
-                boolean copyFile = FileUtil.copyFile(srcFile, new File(parentFile.getPath()
-                    + File.separator + srcFile.getName()));
-                if (copyFile)
+                if (srcFile.isFile())
                 {
-                    FileUtil.deleteFile(string);
+                    hendleFile(srcFile, new File(getDesPath(event) + File.separator + srcFile.getName()));
+                }
+                else
+                {
+
                 }
             }
             fileTreeViewer.refresh();
@@ -84,5 +83,28 @@ public class FileDropListener implements DropTargetListener
     public void dragLeave(DropTargetEvent event)
     {
 
+    }
+
+    private void hendleFile(File srcFile, File desFile)
+    {
+        boolean copyFile = FileUtil.copyFile(srcFile, desFile);
+        if (copyFile)
+        {
+            FileUtil.deleteFile(srcFile);
+        }
+    }
+
+    // get destination file directory
+    private String getDesPath(DropTargetEvent event)
+    {
+        File targetFile = (File) event.item.getData();
+        if (targetFile.isDirectory())
+        {
+            return targetFile.getAbsolutePath();
+        }
+        else
+        {
+            return targetFile.getParentFile().getAbsolutePath();
+        }
     }
 }

@@ -85,7 +85,7 @@ public class FileExplorerView extends ViewPart
     @Override
     public void createPartControl(Composite parent)
     {
-        fileTreeViewer = new TreeViewer(parent, SWT.NONE);
+        fileTreeViewer = new TreeViewer(parent, SWT.MULTI);
         fileTreeViewer.setContentProvider(new FileTreeContentProvider());
         fileTreeViewer.setLabelProvider(new FileTreeLabelProvider());
         fileTreeViewer.setInput(File.listRoots());
