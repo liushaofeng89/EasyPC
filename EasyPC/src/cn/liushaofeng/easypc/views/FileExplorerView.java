@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IStatusLineManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -19,13 +18,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import cn.liushaofeng.easypc.actions.CleanUpAction;
 import cn.liushaofeng.easypc.app.Activator;
 import cn.liushaofeng.easypc.editors.TextEditor;
 import cn.liushaofeng.easypc.editors.input.TextEditorInput;
@@ -47,7 +44,6 @@ public class FileExplorerView extends ViewPart
     public static final String NAME = "File Explorer"; //$NON-NLS-1$
     public static final String TIPS = "File Explorer"; //$NON-NLS-1$
 
-    private CleanUpAction cleanAction = new CleanUpAction();
     private TreeViewer fileTreeViewer = null;
     private Vector<String> supportEditExtension = new Vector<String>();// 可以被文本编辑器打开的文件类型
 
@@ -90,9 +86,13 @@ public class FileExplorerView extends ViewPart
         fileTreeViewer.setLabelProvider(new FileTreeLabelProvider());
         fileTreeViewer.setInput(File.listRoots());
         fileTreeViewer.addDragSupport(DND.DROP_MOVE, new Transfer[]
-        { FileTransfer.getInstance() }, new FileDragListener(fileTreeViewer));
+        {
+            FileTransfer.getInstance()
+        }, new FileDragListener(fileTreeViewer));
         fileTreeViewer.addDropSupport(DND.DROP_MOVE | DND.DROP_DEFAULT, new Transfer[]
-        { FileTransfer.getInstance() }, new FileDropListener(fileTreeViewer));
+        {
+            FileTransfer.getInstance()
+        }, new FileDropListener(fileTreeViewer));
         fileTreeViewer.addSelectionChangedListener(new ISelectionChangedListener()
         {
             @Override
@@ -119,20 +119,19 @@ public class FileExplorerView extends ViewPart
                         if (findEditor != null)
                         {
                             findEditor.setFocus();
-                        } else
+                        }
+                        else
                         {
                             activePage.openEditor(textEditorInput, TextEditor.ID);
                         }
-                    } catch (PartInitException e1)
+                    }
+                    catch (PartInitException e1)
                     {
                         Logger.getLogger(this.getClass()).error(e1.getMessage(), e1);
                     }
                 }
             }
         });
-
-        // 创建action bar和menu bar
-        contributeToActionBars();
     }
 
     @Override
@@ -161,15 +160,4 @@ public class FileExplorerView extends ViewPart
         return supportEditExtension.contains(f.getName().substring(f.getName().lastIndexOf(".") + 1));
     }
 
-    // create menu and toolbar
-    private void contributeToActionBars()
-    {
-        IActionBars actionBars = getViewSite().getActionBars();
-        fillToolsBar(actionBars.getToolBarManager());
-    }
-
-    private void fillToolsBar(IToolBarManager toolBarManager)
-    {
-        toolBarManager.add(cleanAction);
-    }
 }

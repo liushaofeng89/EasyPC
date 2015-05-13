@@ -114,6 +114,16 @@
             id="cn.liushaofeng.easypc.views.httplookview">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Clean Up"
+            allowMultiple="true"
+            icon="icons/cleanup.gif"
+            class="cn.liushaofeng.easypc.views.CleanUpView"
+            id="cn.liushaofeng.easypc.views.cleanupview">
+      </view>
+   </extension>
    
    
  	<extension
