@@ -1,5 +1,7 @@
 package cn.liushaofeng.easypc.app;
 
+import java.io.File;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ICoolBarManager;
@@ -117,9 +119,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         windowMenu.add(resetPerspectiveAction);
 
         // Help
-        helpMenu.add(aboutAction);
-        helpMenu.add(new Separator());
         helpMenu.add(introAction);
+        helpMenu.add(new Separator());
+        helpMenu.add(aboutAction);
     }
 
     protected void fillCoolBar(ICoolBarManager coolBar)
