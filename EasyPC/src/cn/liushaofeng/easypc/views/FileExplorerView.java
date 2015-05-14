@@ -86,7 +86,7 @@ public class FileExplorerView extends ViewPart
                 updateStatusLine((File) selection.getFirstElement());
             }
         });
-        fileTreeViewer.getTree().addSelectionListener(new FileSelectionListener(getViewSite()));
+        fileTreeViewer.getTree().addSelectionListener(new FileSelectionListener(fileTreeViewer, getViewSite()));
     }
 
     @Override

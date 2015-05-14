@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TreeItem;
@@ -17,18 +18,27 @@ import org.eclipse.ui.PartInitException;
 import cn.liushaofeng.easypc.editors.TextEditor;
 import cn.liushaofeng.easypc.editors.input.TextEditorInput;
 
+/**
+ * file double click event(open this file by default way)
+ * @author liushaofeng
+ * @date 2015-5-14
+ * @version 1.0.0
+ */
 public class FileSelectionListener extends SelectionAdapter
 {
     private Vector<String> supportEditExtension = new Vector<String>();// 可以被文本编辑器打开的文件类型
     private Map<String, TextEditorInput> dataMap = new HashMap<String, TextEditorInput>();
     private IViewSite viewSite = null;
+    private TreeViewer fileTreeViewer = null;
 
     /**
      * default constructor
+     * @param fileTreeViewer
      * @param viewSite current viewSite
      */
-    public FileSelectionListener(IViewSite iViewSite)
+    public FileSelectionListener(TreeViewer fileTreeViewer, IViewSite iViewSite)
     {
+        this.fileTreeViewer = fileTreeViewer;
         this.viewSite = iViewSite;
 
         supportEditExtension.add("txt");
@@ -44,6 +54,12 @@ public class FileSelectionListener extends SelectionAdapter
     {
         TreeItem treeItem = (TreeItem) e.item;
         File file = (File) treeItem.getData();
+        if (file.isDirectory())
+        {
+            treeItem.setExpanded(!treeItem.getExpanded());
+            fileTreeViewer.refresh();
+            return;
+        }
         if (supportEdit(file))
         {
             IWorkbenchPage activePage = viewSite.getWorkbenchWindow().getActivePage();
