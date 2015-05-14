@@ -60,8 +60,23 @@ public class CleanUpView extends ViewPart
         toolkit.createButton(browserClient, "FireFox", SWT.CHECK);
         toolkit.createButton(browserClient, "Chrome", SWT.CHECK);
         browserSection.setClient(browserClient);
-        TableWrapData td = new TableWrapData(TableWrapData.FILL_GRAB);
-        browserSection.setLayoutData(td);
+        browserSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+
+        Section playerSection = new Section(form.getBody(), Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED);
+        playerSection.addExpansionListener(new ExpansionAdapter()
+        {
+            public void expansionStateChanged(ExpansionEvent e)
+            {
+                form.reflow(true);
+            }
+        });
+        playerSection.setText("Audio or Video Clean");
+        Composite playerClient = toolkit.createComposite(playerSection);
+        playerClient.setLayout(new GridLayout());
+        toolkit.createButton(playerClient, "Kuwo Music Player", SWT.CHECK);
+        toolkit.createButton(playerClient, "Xunlei kankan", SWT.CHECK);
+        playerSection.setClient(playerClient);
+        playerSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
 
         Section systemSection = new Section(form.getBody(), Section.TITLE_BAR | Section.TWISTIE);
         systemSection.addExpansionListener(new ExpansionAdapter()
@@ -74,14 +89,18 @@ public class CleanUpView extends ViewPart
         systemSection.setText("System Clean");
         Composite sysClient = toolkit.createComposite(systemSection);
         sysClient.setLayout(new GridLayout());
-        toolkit.createButton(sysClient, "Recycle Bin", SWT.CHECK);
-        toolkit.createButton(sysClient, "Traces", SWT.CHECK);
-        toolkit.createButton(sysClient, "Temp File", SWT.CHECK);
-        toolkit.createButton(sysClient, "Log File", SWT.CHECK);
-        toolkit.createButton(sysClient, "Bak File", SWT.CHECK);
+        toolkit.createButton(sysClient, "Recycle bin", SWT.CHECK);
+        toolkit.createButton(sysClient, "User temp folder", SWT.CHECK);
+        toolkit.createButton(sysClient, "Windows temp folder", SWT.CHECK);
+        toolkit.createButton(sysClient, "Thumbnails cache", SWT.CHECK);
+        toolkit.createButton(sysClient, "Windows error log file", SWT.CHECK);
+        toolkit.createButton(sysClient, "Windows update hotfix", SWT.CHECK);
+        toolkit.createButton(sysClient, "Windows prefetch", SWT.CHECK);// windows预读文件
+        toolkit.createButton(sysClient, "Windows dump file", SWT.CHECK);
+        toolkit.createButton(sysClient, "Windows system log file", SWT.CHECK);
+        toolkit.createButton(sysClient, "Remote desktop cache", SWT.CHECK);
         systemSection.setClient(sysClient);
-        td = new TableWrapData(TableWrapData.FILL);
-        systemSection.setLayoutData(td);
+        systemSection.setLayoutData(new TableWrapData(TableWrapData.FILL));
 
         Section registrySection = new Section(form.getBody(), Section.TITLE_BAR | Section.TWISTIE);
         registrySection.addExpansionListener(new ExpansionAdapter()
@@ -97,12 +116,41 @@ public class CleanUpView extends ViewPart
         toolkit.createButton(registryClient, "Radio 1", SWT.CHECK);
         toolkit.createButton(registryClient, "Radio 2", SWT.CHECK);
         registrySection.setClient(registryClient);
-        td = new TableWrapData(TableWrapData.FILL);
-        registrySection.setLayoutData(td);
+        registrySection.setLayoutData(new TableWrapData(TableWrapData.FILL));
 
-        makeActions();
+        Section otherSection = new Section(form.getBody(), Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED);
+        otherSection.addExpansionListener(new ExpansionAdapter()
+        {
+            public void expansionStateChanged(ExpansionEvent e)
+            {
+                form.reflow(true);
+            }
+        });
+        otherSection.setText("Other File");
+        Composite otherClient = toolkit.createComposite(otherSection);
+        otherClient.setLayout(new GridLayout(0xa, true));
+        toolkit.createButton(otherClient, "*.tmp", SWT.CHECK);
+        toolkit.createButton(otherClient, "*._mp", SWT.CHECK);
+        toolkit.createButton(otherClient, "*.log", SWT.CHECK);
+        toolkit.createButton(otherClient, "*.gid", SWT.CHECK);
+        toolkit.createButton(otherClient, "*.chk", SWT.CHECK);
+        toolkit.createButton(otherClient, "*.old", SWT.CHECK);
+        toolkit.createButton(otherClient, "*.bak", SWT.CHECK);
+        otherSection.setClient(otherClient);
+        otherSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+
         // 创建action bar和menu bar
         contributeToActionBars();
+    }
+
+    // create menu and toolbar
+    private void contributeToActionBars()
+    {
+        makeActions();
+
+        IActionBars actionBars = getViewSite().getActionBars();
+        fillToolsBar(actionBars.getToolBarManager());
+        fillMenuBar(actionBars.getMenuManager());
     }
 
     private void makeActions()
@@ -113,14 +161,6 @@ public class CleanUpView extends ViewPart
         // tool bar
         cleanAction = new CleanUpControlAction();
         checkAction = new CleanUpCheckAction();
-    }
-
-    // create menu and toolbar
-    private void contributeToActionBars()
-    {
-        IActionBars actionBars = getViewSite().getActionBars();
-        fillToolsBar(actionBars.getToolBarManager());
-        fillMenuBar(actionBars.getMenuManager());
     }
 
     private void fillMenuBar(IMenuManager menuManager)
