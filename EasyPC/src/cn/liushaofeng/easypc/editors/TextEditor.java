@@ -1,8 +1,10 @@
 package cn.liushaofeng.easypc.editors;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -67,27 +69,30 @@ public class TextEditor extends EditorPart
     @Override
     public void doSave(IProgressMonitor monitor)
     {
+        BufferedWriter bufferedWriter = null;
         try
         {
-            monitor.beginTask("Saving file...", 100);
-
-            for (int i = 0; i < 10 && !monitor.isCanceled(); i++)
-            {
-                Thread.sleep(500);
-                monitor.worked(10);
-                double d = (i + 1) / 10d;
-                monitor.subTask("Finished" + d * 100 + "%");
-            }
-            monitor.done();
-            if (monitor.isCanceled())
-            {
-                throw new InterruptedException("Canceled this save event.");
-            }
-        } catch (InterruptedException e)
-        {
-            Logger.getLogger(TextEditor.class).error(e.getMessage(), e);
+            bufferedWriter = new BufferedWriter(new FileWriter(TextEditorInput.getFile()));
+            bufferedWriter.write(text.getText());
+            setDirty(false);
+            // 更改编辑器状态
+            firePropertyChange(IEditorPart.PROP_DIRTY);
         }
-
+        catch (IOException e1)
+        {
+            e1.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                bufferedWriter.close();
+            }
+            catch (IOException e)
+            {
+                Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+            }
+        }
     }
 
     @Override
@@ -133,20 +138,24 @@ public class TextEditor extends EditorPart
                 {
                     text.append(line + System.getProperty("line.separator"));
                 }
-            } catch (FileNotFoundException e)
+            }
+            catch (FileNotFoundException e)
             {
                 Logger.getLogger(this.getClass()).error(e.getMessage(), e);
-            } catch (IOException e)
+            }
+            catch (IOException e)
             {
                 Logger.getLogger(this.getClass()).error(e.getMessage(), e);
-            } finally
+            }
+            finally
             {
                 if (bufferedReader != null)
                 {
                     try
                     {
                         bufferedReader.close();
-                    } catch (IOException e)
+                    }
+                    catch (IOException e)
                     {
                         Logger.getLogger(this.getClass()).error(e.getMessage(), e);
                     }

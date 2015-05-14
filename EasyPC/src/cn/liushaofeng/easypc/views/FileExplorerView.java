@@ -1,9 +1,7 @@
 package cn.liushaofeng.easypc.views;
 
 import java.io.File;
-import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -13,22 +11,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import cn.liushaofeng.easypc.app.Activator;
-import cn.liushaofeng.easypc.editors.TextEditor;
-import cn.liushaofeng.easypc.editors.input.TextEditorInput;
 import cn.liushaofeng.easypc.util.FileUtil;
 import cn.liushaofeng.easypc.views.listener.FileDragListener;
 import cn.liushaofeng.easypc.views.listener.FileDropListener;
+import cn.liushaofeng.easypc.views.listener.FileSelectionListener;
 import cn.liushaofeng.easypc.views.provider.FileTreeContentProvider;
 import cn.liushaofeng.easypc.views.provider.FileTreeLabelProvider;
 
@@ -45,19 +36,12 @@ public class FileExplorerView extends ViewPart
     public static final String TIPS = "File Explorer"; //$NON-NLS-1$
 
     private TreeViewer fileTreeViewer = null;
-    private Vector<String> supportEditExtension = new Vector<String>();// 可以被文本编辑器打开的文件类型
 
     /**
      * default constructor
      */
     public FileExplorerView()
     {
-        supportEditExtension.add("txt");
-        supportEditExtension.add("xml");
-        supportEditExtension.add("log");
-        supportEditExtension.add("ini");
-        supportEditExtension.add("html");
-        supportEditExtension.add("htm");
     }
 
     @Override
@@ -102,36 +86,7 @@ public class FileExplorerView extends ViewPart
                 updateStatusLine((File) selection.getFirstElement());
             }
         });
-        fileTreeViewer.getTree().addSelectionListener(new SelectionAdapter()
-        {
-            @Override
-            public void widgetDefaultSelected(SelectionEvent e)
-            {
-                TreeItem treeItem = (TreeItem) e.item;
-                File file = (File) treeItem.getData();
-                if (supportEdit(file))
-                {
-                    TextEditorInput textEditorInput = new TextEditorInput(file);
-                    try
-                    {
-                        IWorkbenchPage activePage = getViewSite().getWorkbenchWindow().getActivePage();
-                        IEditorPart findEditor = activePage.findEditor(textEditorInput);
-                        if (findEditor != null)
-                        {
-                            findEditor.setFocus();
-                        }
-                        else
-                        {
-                            activePage.openEditor(textEditorInput, TextEditor.ID);
-                        }
-                    }
-                    catch (PartInitException e1)
-                    {
-                        Logger.getLogger(this.getClass()).error(e1.getMessage(), e1);
-                    }
-                }
-            }
-        });
+        fileTreeViewer.getTree().addSelectionListener(new FileSelectionListener(getViewSite()));
     }
 
     @Override
@@ -153,11 +108,6 @@ public class FileExplorerView extends ViewPart
     {
         String wasteSpace = FileUtil.getWasteSpace(file);
         return wasteSpace.isEmpty() ? "" : " (" + wasteSpace + ")";
-    }
-
-    private boolean supportEdit(File f)
-    {
-        return supportEditExtension.contains(f.getName().substring(f.getName().lastIndexOf(".") + 1));
     }
 
 }
