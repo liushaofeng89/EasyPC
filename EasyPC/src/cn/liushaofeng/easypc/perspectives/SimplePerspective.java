@@ -4,9 +4,10 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import cn.liushaofeng.easypc.views.CleanUpView;
+import cn.liushaofeng.easypc.views.CleanUpFormView;
 import cn.liushaofeng.easypc.views.ContactView;
 import cn.liushaofeng.easypc.views.FileExplorerView;
+import cn.liushaofeng.easypc.views.cleanup.CleanUpView;
 
 /**
  * Simple user perspective
@@ -29,8 +30,10 @@ public class SimplePerspective implements IPerspectiveFactory
 
         IFolderLayout rightFolder = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.65f, editorArea);
         rightFolder.addView(CleanUpView.ID);
+        rightFolder.addView(CleanUpFormView.ID);
         rightFolder.addView(ContactView.ID);
         rightFolder.addPlaceholder(CleanUpView.ID);
+        rightFolder.addPlaceholder(CleanUpFormView.ID);
         rightFolder.addPlaceholder(ContactView.ID);
     }
 

@@ -25,9 +25,9 @@ import cn.liushaofeng.easypc.actions.CleanUpScheduledAction;
  * @date 2015-5-13
  * @version 1.0.0
  */
-public class CleanUpView extends ViewPart
+public class CleanUpFormView extends ViewPart
 {
-    public static final String ID = "cn.liushaofeng.easypc.views.cleanupview";
+    public static final String ID = "cn.liushaofeng.easypc.views.cleanupformview";
 
     private CleanUpScheduledAction scheduledAction = null;
     private CleanUpControlAction cleanAction = null;
