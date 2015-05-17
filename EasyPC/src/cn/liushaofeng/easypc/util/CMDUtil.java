@@ -22,17 +22,18 @@ public final class CMDUtil
     }
 
     /**
-     * 
+     * open the file dir
+     * @param file the file dir need to open
      */
     public static final void explorerDir(File file)
     {
         if (!file.isDirectory())
         {
-            throw new IllegalArgumentException("The input file is not a dir!");
+            throw new IllegalArgumentException("The input file is not a dir!");//$NON-NLS-1$
         }
         if (SystemUtil.getOSType() == SystemUtil.SYSTEM_CONSTANT_OS_TYPE_WINDOWS)
         {
-            doCmd("cmd /c start explorer " + file.getAbsolutePath());
+            doCmd("cmd /c start explorer " + file.getAbsolutePath());//$NON-NLS-1$
         }
     }
 
@@ -43,14 +44,14 @@ public final class CMDUtil
      */
     private boolean executeShutdown(int sec)
     {
-        return false;
+        return doCmd("shutdown -s -t " + sec);//$NON-NLS-1$
     }
 
     private static boolean doCmd(String cmd)
     {
         if (cmd == null || cmd.isEmpty())
         {
-            throw new NullPointerException("The input cmd string is null!");
+            throw new NullPointerException("The input cmd string is null!");//$NON-NLS-1$
         }
         try
         {
