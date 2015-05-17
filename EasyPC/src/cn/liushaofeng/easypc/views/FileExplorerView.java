@@ -90,7 +90,7 @@ public class FileExplorerView extends ViewPart
             }
         });
         fileTreeViewer.getTree().addSelectionListener(new FileSelectionListener(fileTreeViewer, getViewSite()));
-        fileTreeViewer.getTree().addMenuDetectListener(new FileMenuDetectListener(fileTreeViewer.getTree()));
+        fileTreeViewer.getTree().addMenuDetectListener(new FileMenuDetectListener(fileTreeViewer));
     }
 
     @Override

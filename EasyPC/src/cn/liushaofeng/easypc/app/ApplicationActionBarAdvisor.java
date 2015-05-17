@@ -19,6 +19,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 import cn.liushaofeng.easypc.actions.SystemInfoAction;
+import cn.liushaofeng.easypc.actions.WifiAction;
 import easypc.MessagePopupAction;
 
 /**
@@ -49,6 +50,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
     // user define actions
     private SystemInfoAction computerInfoAction;
+    private WifiAction wifiAction;
 
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer)
     {
@@ -88,6 +90,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         register(messagePopupAction);
 
         computerInfoAction = new SystemInfoAction();
+        wifiAction = new WifiAction();
 
     }
 
@@ -128,6 +131,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         coolBar.add(new ToolBarContributionItem(toolbar, "main"));
         toolbar.add(saveAction);
         toolbar.add(computerInfoAction);
+        toolbar.add(wifiAction);
     }
 
     @Override

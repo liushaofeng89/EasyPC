@@ -119,7 +119,7 @@
       <view
             name="Clean Up"
             allowMultiple="true"
-            icon="icons/cleanup.gif"
+            icon="icons/clear.gif"
             class="cn.liushaofeng.easypc.views.cleanup.CleanUpView"
             id="cn.liushaofeng.easypc.views.cleanup.cleanupview">
       </view>
@@ -129,7 +129,7 @@
       <view
             name="Clean Up"
             allowMultiple="true"
-            icon="icons/cleanup.gif"
+            icon="icons/clear.gif"
             class="cn.liushaofeng.easypc.views.CleanUpFormView"
             id="cn.liushaofeng.easypc.views.cleanupformview">
       </view>

@@ -1,1 +1,6 @@
 *.class
+bin/*
+*/build/classes/*.class
+*/bin/*
+build/classes/*.class
+*/build/classes/*.xml
