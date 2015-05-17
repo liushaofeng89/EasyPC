@@ -4,9 +4,6 @@ import org.apache.log4j.Logger;
 import org.hyperic.sigar.OperatingSystem;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
-import org.hyperic.sigar.cmd.CpuInfo;
-import org.hyperic.sigar.cmd.Shell;
-import org.hyperic.sigar.cmd.SysInfo;
 
 /**
  * System tool for get detailed information
@@ -16,7 +13,10 @@ import org.hyperic.sigar.cmd.SysInfo;
  */
 public final class SystemUtil
 {
-    private static final Shell shell = new Shell();
+    public static final int SYSTEM_CONSTANT_OS_TYPE_UNKONOWN = 0xFFFFFFFF;
+    public static final int SYSTEM_CONSTANT_OS_TYPE_WINDOWS = 0x0;
+    public static final int SYSTEM_CONSTANT_OS_TYPE_LINUX = 0x1;
+    public static final int SYSTEM_CONSTANT_OS_TYPE_MAXOS = 0x2;
 
     /**
      * get OS name
@@ -25,6 +25,19 @@ public final class SystemUtil
     public static String getOSName()
     {
         return OperatingSystem.getInstance().getDescription();
+    }
+
+    /**
+     * get current OS type
+     * @return current OS type
+     */
+    public static int getOSType()
+    {
+        if (System.getProperty("os.name").toLowerCase().indexOf("windows") != -1)
+        {
+            return SYSTEM_CONSTANT_OS_TYPE_WINDOWS;
+        }
+        return SYSTEM_CONSTANT_OS_TYPE_UNKONOWN;
     }
 
     /**
@@ -39,7 +52,8 @@ public final class SystemUtil
         try
         {
             infos = sigar.getCpuInfoList();
-        } catch (SigarException e)
+        }
+        catch (SigarException e)
         {
             Logger.getLogger(SystemUtil.class).error(e.getMessage(), e);
         }
