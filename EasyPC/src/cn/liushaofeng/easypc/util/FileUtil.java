@@ -29,6 +29,34 @@ public final class FileUtil
     }
 
     /**
+     * create a new file
+     * @param file new file
+     * @return create file success or not
+     */
+    public static final boolean createNewFile(File file)
+    {
+        try
+        {
+            return file.createNewFile();
+        }
+        catch (IOException e)
+        {
+            Logger.getLogger(FileUtil.class).error(e.getMessage(), e);
+            return false;
+        }
+    }
+
+    /**
+     * create a new directory
+     * @param file new directory
+     * @return create directory success or not
+     */
+    public static final boolean createDirs(File file)
+    {
+        return file.mkdirs();
+    }
+
+    /**
      * delete file
      * @param path the file need to delete
      * @return delete success or not
@@ -77,12 +105,14 @@ public final class FileUtil
                     out.flush();
                     out.close();
                     return true;
-                } else
+                }
+                else
                 {
                     out.write(buffer, 0, ins);
                 }
             }
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             Logger.getLogger(FileUtil.class).error(e.getMessage(), e);
             return false;
@@ -98,8 +128,7 @@ public final class FileUtil
     {
         if (file == null)
         {
-            throw new NullPointerException(
-                "The input file is null,can not get remain space from the input file.");
+            throw new NullPointerException("The input file is null,can not get remain space from the input file.");
         }
         if (!file.isDirectory())
         {
@@ -126,23 +155,28 @@ public final class FileUtil
                         if (tbSpace > 1)
                         {
                             return tbSpace + COMPUTER_UNIT_SIZE_PB;
-                        } else
+                        }
+                        else
                         {
                             return mbSpace + COMPUTER_UNIT_SIZE_TB;
                         }
-                    } else
+                    }
+                    else
                     {
                         return mbSpace + COMPUTER_UNIT_SIZE_GB;
                     }
-                } else
+                }
+                else
                 {
                     return kbSpace + COMPUTER_UNIT_SIZE_MB;
                 }
-            } else
+            }
+            else
             {
                 return byteSpace + COMPUTER_UNIT_SIZE_KB;
             }
-        } else
+        }
+        else
         {
             return size + COMPUTER_UNIT_SIZE_BYTE;
         }

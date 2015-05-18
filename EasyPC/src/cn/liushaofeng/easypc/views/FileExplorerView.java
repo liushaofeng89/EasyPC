@@ -19,6 +19,7 @@ import cn.liushaofeng.easypc.app.Activator;
 import cn.liushaofeng.easypc.util.FileUtil;
 import cn.liushaofeng.easypc.views.listener.FileDragListener;
 import cn.liushaofeng.easypc.views.listener.FileDropListener;
+import cn.liushaofeng.easypc.views.listener.FileKeyListener;
 import cn.liushaofeng.easypc.views.listener.FileMenuDetectListener;
 import cn.liushaofeng.easypc.views.listener.FileSelectionListener;
 import cn.liushaofeng.easypc.views.provider.FileTreeContentProvider;
@@ -90,7 +91,9 @@ public class FileExplorerView extends ViewPart
             }
         });
         fileTreeViewer.getTree().addSelectionListener(new FileSelectionListener(fileTreeViewer, getViewSite()));
-        fileTreeViewer.getTree().addMenuDetectListener(new FileMenuDetectListener(fileTreeViewer));
+        FileMenuDetectListener menuDetectListner = new FileMenuDetectListener(fileTreeViewer);
+        fileTreeViewer.getTree().addMenuDetectListener(menuDetectListner);
+        fileTreeViewer.getTree().addKeyListener(new FileKeyListener(fileTreeViewer,menuDetectListner));
     }
 
     @Override

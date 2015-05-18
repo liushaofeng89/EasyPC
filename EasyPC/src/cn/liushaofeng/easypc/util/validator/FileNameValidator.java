@@ -13,20 +13,17 @@ import org.eclipse.jface.dialogs.IInputValidator;
  */
 public class FileNameValidator implements IInputValidator
 {
-    private String regex = "[^\\/<?:>\"|]";
+    private String regex = "[^\\/<?:>\"|]*";
 
     @Override
     public String isValid(String newText)
     {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(newText);
-        if (m.find())
+        if (!m.matches())
         {
             return "The file name not support chars:^\\/<?:>\"|";
         }
-        else
-        {
-            return "";
-        }
+        return null;
     }
 }
