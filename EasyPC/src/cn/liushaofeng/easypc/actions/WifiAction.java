@@ -3,8 +3,10 @@ package cn.liushaofeng.easypc.actions;
 import java.io.File;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Display;
 
 import cn.liushaofeng.easypc.app.Activator;
+import cn.liushaofeng.easypc.ui.dialog.WifiDailog;
 
 /**
  * Wifi create action
@@ -18,4 +20,11 @@ public class WifiAction extends Action
     {
         super("Create WIFI", Activator.getImageDescriptor("icons" + File.separator + "wifi.gif"));
     }
+
+    @Override
+    public void run()
+    {
+        new WifiDailog(Display.getCurrent().getActiveShell()).open();
+    }
+
 }
