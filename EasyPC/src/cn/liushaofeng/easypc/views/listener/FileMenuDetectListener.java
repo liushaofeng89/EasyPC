@@ -64,7 +64,7 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                if (selectFiles.length > 0x0)
+                if (selectFiles.length > 0x1)
                 {
                     return;
                 }
@@ -81,7 +81,7 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                if (selectFiles.length > 0x0)
+                if (selectFiles.length > 0x1)
                 {
                     return;
                 }
@@ -112,10 +112,6 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                if (selectFiles.length > 0x0)
-                {
-                    return;
-                }
                 deleteFile(selectFiles);
             }
         });
@@ -129,7 +125,7 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                if (selectFiles.length > 0x0)
+                if (selectFiles.length > 0x1)
                 {
                     return;
                 }
@@ -161,7 +157,7 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                if (selectFiles.length > 0x0)
+                if (selectFiles.length > 0x1)
                 {
                     return;
                 }

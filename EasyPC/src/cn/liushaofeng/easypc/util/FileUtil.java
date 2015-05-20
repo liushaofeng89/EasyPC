@@ -71,13 +71,43 @@ public final class FileUtil
      * @param file the file need to delete
      * @return delete file success or not
      */
-    public static final boolean deleteFile(File file)
+    public static boolean deleteFile(File file)
     {
-        if (file.exists())
+        if (!file.exists())
+        {
+            return false;
+        }
+
+        if (file.isFile())
         {
             return file.delete();
         }
-        return false;
+        else
+        {
+            return deleteDir(file);
+        }
+    }
+
+    /**
+     * delete directory
+     * @param dirFile directory
+     * @return delete success or not
+     */
+    public static boolean deleteDir(File dirFile)
+    {
+        File[] listFiles = dirFile.listFiles();
+        for (File file : listFiles)
+        {
+            if (file.isFile())
+            {
+                deleteFile(file);
+            }
+            else
+            {
+                deleteDir(file);
+            }
+        }
+        return dirFile.delete();
     }
 
     /**
