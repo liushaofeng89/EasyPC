@@ -14,7 +14,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 import cn.liushaofeng.easypc.app.Activator;
@@ -45,6 +44,12 @@ public class FileMenuDetectListener implements MenuDetectListener
     @Override
     public void menuDetected(MenuDetectEvent e)
     {
+        final File[] selectFiles = selectItem();
+        if (selectFiles.length <= 0x0)
+        {
+            return;
+        }
+
         Menu menu = new Menu(treeViewer.getTree().getShell(), SWT.NONE);
 
         MenuItem newItem = new MenuItem(menu, SWT.CASCADE);
@@ -59,29 +64,12 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                File srcFile = hasSelectItem();
-                if (srcFile == null)
+                if (selectFiles.length > 0x0)
                 {
                     return;
                 }
-                Shell shell = treeViewer.getTree().getShell();
-                InputDialog inputDialog = new InputDialog(shell, "New File Dialog", "Input file name, please:",
-                    "unuamed", new FileNameValidator());
-                if (Window.OK == inputDialog.open())
-                {
-                    String absolutePath = srcFile.getAbsolutePath();
-                    String newFilePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator) + 0x1)
-                        + inputDialog.getValue();
-                    File file = new File(newFilePath);
-                    if (file.exists())
-                    {
-                        MessageDialog.openError(shell, "Rename Fail Message", "The destnation file is exists!");
-                    }
-                    else
-                    {
-                        FileUtil.createNewFile(file);
-                    }
-                }
+                doCreate(true, selectFiles[0x0]);
+                treeViewer.refresh();
             }
         });
 
@@ -93,29 +81,12 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                File srcFile = hasSelectItem();
-                if (srcFile == null)
+                if (selectFiles.length > 0x0)
                 {
                     return;
                 }
-                Shell shell = treeViewer.getTree().getShell();
-                InputDialog inputDialog = new InputDialog(shell, "New Directory Dialog",
-                    "Input Directory name, please:", "unuamed", new FileNameValidator());
-                if (Window.OK == inputDialog.open())
-                {
-                    String absolutePath = srcFile.getAbsolutePath();
-                    String newFilePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator) + 0x1)
-                        + inputDialog.getValue();
-                    File file = new File(newFilePath);
-                    if (file.exists())
-                    {
-                        MessageDialog.openError(shell, "Rename Fail Message", "The destnation file is exists!");
-                    }
-                    else
-                    {
-                        FileUtil.createDirs(file);
-                    }
-                }
+                doCreate(false, selectFiles[0]);
+                treeViewer.refresh();
             }
         });
         newItem.setMenu(newMenu);
@@ -136,6 +107,18 @@ public class FileMenuDetectListener implements MenuDetectListener
         MenuItem deleteItem = new MenuItem(menu, SWT.PUSH);
         deleteItem.setText("Delete...\tDelete");
         deleteItem.setImage(Activator.getImage(false, "icons" + File.separator + "delete.gif"));
+        deleteItem.addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                if (selectFiles.length > 0x0)
+                {
+                    return;
+                }
+                deleteFile(selectFiles);
+            }
+        });
 
         new MenuItem(menu, SWT.SEPARATOR);
 
@@ -146,7 +129,11 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                renameFile();
+                if (selectFiles.length > 0x0)
+                {
+                    return;
+                }
+                renameFile(selectFiles[0]);
             }
         });
 
@@ -174,31 +161,108 @@ public class FileMenuDetectListener implements MenuDetectListener
             @Override
             public void widgetSelected(SelectionEvent e)
             {
-                TreeItem treeItem = treeViewer.getTree().getSelection()[0];
-                File file = (File) treeItem.getData();
-                if (file.isDirectory())
+                if (selectFiles.length > 0x0)
                 {
-                    CMDUtil.explorerDir(file);
+                    return;
+                }
+                if (selectFiles[0].isDirectory())
+                {
+                    CMDUtil.explorerDir(selectFiles[0x0]);
                 }
                 else
                 {
-                    CMDUtil.explorerDir(file.getParentFile());
+                    CMDUtil.explorerDir(selectFiles[0x0].getParentFile());
                 }
             }
         });
         treeViewer.getTree().setMenu(menu);
     }
 
+    private void doCreate(boolean isFile, File srcFile)
+    {
+        String title = isFile ? "New File Dialog" : "New Directory Dialog";
+        String msg = isFile ? "Input file name, please:" : "Input Directory name, please:";
+        Shell shell = treeViewer.getTree().getShell();
+        InputDialog inputDialog = new InputDialog(shell, title, msg, "unuamed", new FileNameValidator());
+        if (Window.OK == inputDialog.open())
+        {
+            createFiles(isFile, srcFile, shell, inputDialog);
+        }
+    }
+
+    /**
+     * create file
+     * @param isFile is a file or not
+     * @param srcFile source file
+     * @param shell parent shell
+     * @param inputDialog input dialog
+     */
+    private void createFiles(boolean isFile, File srcFile, Shell shell, InputDialog inputDialog)
+    {
+        String absolutePath = srcFile.getAbsolutePath();
+        File file = new File(resolvePath(srcFile, inputDialog, absolutePath));
+        if (file.exists())
+        {
+            MessageDialog.openError(shell, "Rename Fail Message", "The destnation file is exists!");
+        }
+        else
+        {
+            if (isFile)
+            {
+                FileUtil.createNewFile(file);
+            }
+            else
+            {
+                FileUtil.createDirs(file);
+            }
+        }
+    }
+
+    /**
+     * resolve path
+     * @param srcFile src file
+     * @param inputDialog input dialog
+     * @param absolutePath the file path
+     * @return new file path
+     */
+    private String resolvePath(File srcFile, InputDialog inputDialog, String absolutePath)
+    {
+        String newFilePath;
+        if (srcFile.isFile())
+        {
+            newFilePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator) + 0x1)
+                + inputDialog.getValue();
+        }
+        else
+        {
+            newFilePath = absolutePath + File.separator + inputDialog.getValue();
+        }
+        return newFilePath;
+    }
+
+    /**
+     * delete file confirm dialog
+     * @param file the file need to delete
+     */
+    public void deleteFile(File[] file)
+    {
+        boolean openQuestion = MessageDialog.openQuestion(treeViewer.getTree().getShell(), "File Delete Dialog",
+            "The file can not recover after deleting, click Yes to delete this file!");
+        if (openQuestion)
+        {
+            for (File f : file)
+            {
+                FileUtil.deleteFile(f);
+            }
+            treeViewer.refresh();
+        }
+    }
+
     /**
      * rename file
      */
-    public void renameFile()
+    public void renameFile(File srcFile)
     {
-        File srcFile = hasSelectItem();
-        if (srcFile == null)
-        {
-            return;
-        }
         Shell shell = treeViewer.getTree().getShell();
         InputDialog inputDialog = new InputDialog(shell, "Rename Dialog", "Input new name, please:", srcFile.getName(),
             new FileNameValidator());
@@ -226,18 +290,14 @@ public class FileMenuDetectListener implements MenuDetectListener
         }
     }
 
-    private File hasSelectItem()
+    private File[] selectItem()
     {
-        Tree tree = treeViewer.getTree();
-        if (tree.getSelection().length == 0x0)
+        TreeItem[] selection = treeViewer.getTree().getSelection();
+        File[] selectedFiles = new File[selection.length];
+        for (int i = 0; i < selection.length; i++)
         {
-            return null;
+            selectedFiles[i] = (File) selection[i].getData();
         }
-        File srcFile = (File) tree.getSelection()[0].getData();
-        if (srcFile.getName().trim().isEmpty())
-        {
-            return null;
-        }
-        return srcFile;
+        return selectedFiles;
     }
 }
