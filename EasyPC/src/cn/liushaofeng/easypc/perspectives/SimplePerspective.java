@@ -7,6 +7,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 import cn.liushaofeng.easypc.views.CleanUpFormView;
 import cn.liushaofeng.easypc.views.ContactView;
 import cn.liushaofeng.easypc.views.FileExplorerView;
+import cn.liushaofeng.easypc.views.SystemInfoView;
 import cn.liushaofeng.easypc.views.cleanup.CleanUpView;
 
 /**
@@ -28,13 +29,10 @@ public class SimplePerspective implements IPerspectiveFactory
 
         layout.addView(FileExplorerView.ID, IPageLayout.LEFT, 0.30f, editorArea);
 
-        IFolderLayout rightFolder = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.65f, editorArea);
+        IFolderLayout rightFolder = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.50f, editorArea);
+        rightFolder.addView(SystemInfoView.ID);
         rightFolder.addView(CleanUpView.ID);
         rightFolder.addView(CleanUpFormView.ID);
         rightFolder.addView(ContactView.ID);
-        rightFolder.addPlaceholder(CleanUpView.ID);
-        rightFolder.addPlaceholder(CleanUpFormView.ID);
-        rightFolder.addPlaceholder(ContactView.ID);
     }
-
 }

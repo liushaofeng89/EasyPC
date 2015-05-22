@@ -1,26 +1,33 @@
-package cn.liushaofeng.easypc.ui.dialog;
+package cn.liushaofeng.easypc.views;
 
-import org.eclipse.jface.dialogs.Dialog;
+import java.util.List;
+
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.part.ViewPart;
 
-import cn.liushaofeng.easypc.util.SystemUtil;
+import cn.liushaofeng.easypc.actions.SystemInfoExportAction;
+import cn.liushaofeng.easypc.util.CMDUtil;
 
 /**
- * the dialog to show system information
+ * system info view
  * @author liushaofeng
- * @date 2015-5-2
+ * @date 2015-5-22
  * @version 1.0.0
  */
-public class SystemInfoDialog extends Dialog
+public class SystemInfoView extends ViewPart
 {
+    public static final String ID = "cn.liushaofeng.easypc.views.systeminfoview";
+
     private static final String TAB_ITEM_OVERVIEW = "Overview";//$NON-NLS-1$
     private static final String TAB_ITEM_CPU = "CPU";//$NON-NLS-1$
     private static final String TAB_ITEM_MAIN_BOARD = "Main Board";//$NON-NLS-1$
@@ -43,32 +50,13 @@ public class SystemInfoDialog extends Dialog
     private static final String TAB_ITEM_OVERVIEW_AUDIO_CARD = "Audio Card:";//$NON-NLS-1$
     private static final String TAB_ITEM_OVERVIEW_NETWORD_CARD = "Netword Card:";//$NON-NLS-1$
 
-    /**
-     * default constructor
-     * @param parentShell patent shell
-     */
-    public SystemInfoDialog(Shell parentShell)
-    {
-        super(parentShell);
-    }
+    private SystemInfoExportAction exportAction;
 
     @Override
-    protected void configureShell(Shell newShell)
+    public void createPartControl(Composite parent)
     {
-        newShell.setText("Show System Information");//$NON-NLS-1$
-        super.configureShell(newShell);
-    }
 
-    @Override
-    protected boolean isResizable()
-    {
-        return true;
-    }
-
-    @Override
-    protected Control createDialogArea(Composite parent)
-    {
-        CTabFolder tabFolder = new CTabFolder(parent, SWT.BORDER);
+        CTabFolder tabFolder = new CTabFolder(parent, SWT.BOTTOM);
         tabFolder.setSimple(true);
         tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -103,66 +91,81 @@ public class SystemInfoDialog extends Dialog
         CTabItem otherItem = new CTabItem(tabFolder, SWT.None);
         otherItem.setText(TAB_ITEM_OTHER);
 
-        return parent;
+        tabFolder.setSelection(0x0);
     }
 
     private Composite getOverviewContent(CTabFolder tabFolder)
     {
-        Composite composite = new Composite(tabFolder, SWT.NONE);
-        composite.setLayout(new GridLayout(2, false));
+        Table table = new Table(tabFolder, SWT.SINGLE | SWT.FULL_SELECTION);
+        table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        table.setLinesVisible(true);
+        table.setHeaderVisible(true);
 
-        Label systemNameLabel = new Label(composite, SWT.NONE);
-        systemNameLabel.setText(TAB_ITEM_OVERVIEW_SYSTEM_MODE);
+        final TableColumn column1 = new TableColumn(table, SWT.NONE);
+        column1.setText("Info Name");
+        final TableColumn column2 = new TableColumn(table, SWT.NONE);
+        column2.setText("Info Value");
 
-        Label systemValLabel = new Label(composite, SWT.NONE);
+        List<String> systemInfo = CMDUtil.getSystemInfo();
+        for (String lineData : systemInfo)
+        {
+            TableItem item = new TableItem(table, SWT.NONE);
+            int lastIndexOf = lineData.lastIndexOf(": ");
+            if (lastIndexOf == 0xFFFFFFFF)
+            {
+                item.setText(new String[]
+                {
+                        "", lineData.trim()
+                });
+            }
+            else
+            {
+                item.setText(new String[]
+                {
+                        lineData.substring(0, lastIndexOf).trim(), lineData.substring(lastIndexOf + 0x2).trim()
+                });
+            }
+        }
 
-        Label osNameLabel = new Label(composite, SWT.NONE);
-        osNameLabel.setText(TAB_ITEM_OVERVIEW_OPERATE_SYSTEM);
+        for (int i = 0; i < table.getColumnCount(); i++)
+        {
+            table.getColumn(i).pack();
+        }
+        // 创建action bar和menu bar
+        contributeToActionBars();
 
-        Label osValLabel = new Label(composite, SWT.NONE);
-        osValLabel.setText(SystemUtil.getOSName());
+        return table;
+    }
 
-        Label cputNameLabel = new Label(composite, SWT.NONE);
-        cputNameLabel.setText(TAB_ITEM_OVERVIEW_CPU);
+    // create menu and toolbar
+    private void contributeToActionBars()
+    {
+        makeActions();
 
-        Label cpuValLabel = new Label(composite, SWT.NONE);
-        cpuValLabel.setText(SystemUtil.getCPUName());
+        IActionBars actionBars = getViewSite().getActionBars();
+        fillToolsBar(actionBars.getToolBarManager());
+        fillMenuBar(actionBars.getMenuManager());
+    }
 
-        Label mainboardNameLabel = new Label(composite, SWT.NONE);
-        mainboardNameLabel.setText(TAB_ITEM_OVERVIEW_MAIN_BOARD);
+    private void makeActions()
+    {
+        // menu bar
+        exportAction = new SystemInfoExportAction();
+    }
 
-        Label mainboardValLabel = new Label(composite, SWT.NONE);
+    private void fillMenuBar(IMenuManager menuManager)
+    {
+        menuManager.add(exportAction);
+    }
 
-        Label memoryNameLabel = new Label(composite, SWT.NONE);
-        memoryNameLabel.setText(TAB_ITEM_OVERVIEW_MEMORY);
+    private void fillToolsBar(IToolBarManager toolBarManager)
+    {
+        toolBarManager.add(exportAction);
+    }
 
-        Label memoryValLabel = new Label(composite, SWT.NONE);
+    @Override
+    public void setFocus()
+    {
 
-        Label diskNameLabel = new Label(composite, SWT.NONE);
-        diskNameLabel.setText(TAB_ITEM_OVERVIEW_MAIN_DISK);
-
-        Label diskValLabel = new Label(composite, SWT.NONE);
-
-        Label graphicsNameLabel = new Label(composite, SWT.NONE);
-        graphicsNameLabel.setText(TAB_ITEM_OVERVIEW_GRAPHICS);
-
-        Label graphicsValLabel = new Label(composite, SWT.NONE);
-
-        Label monitorNameLabel = new Label(composite, SWT.NONE);
-        monitorNameLabel.setText(TAB_ITEM_OVERVIEW_MONITOR);
-
-        Label monitorValLabel = new Label(composite, SWT.NONE);
-
-        Label audioNameLabel = new Label(composite, SWT.NONE);
-        audioNameLabel.setText(TAB_ITEM_OVERVIEW_AUDIO_CARD);
-
-        Label audioValLabel = new Label(composite, SWT.NONE);
-
-        Label networkNameLabel = new Label(composite, SWT.NONE);
-        networkNameLabel.setText(TAB_ITEM_OVERVIEW_NETWORD_CARD);
-
-        Label networkValLabel = new Label(composite, SWT.NONE);
-
-        return composite;
     }
 }

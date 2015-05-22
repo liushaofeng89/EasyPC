@@ -167,7 +167,12 @@ public final class FileUtil
         return "";
     }
 
-    private static String convertSizeUnit(long size)
+    /**
+     * convert size
+     * @param size size
+     * @return other way to show size
+     */
+    public static String convertSizeUnit(long size)
     {
         long byteSpace = size / COMPUTER_UNIT_SIZE;
         if (byteSpace > 1)

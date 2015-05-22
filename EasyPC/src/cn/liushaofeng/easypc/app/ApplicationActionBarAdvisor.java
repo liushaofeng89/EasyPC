@@ -18,7 +18,6 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
-import cn.liushaofeng.easypc.actions.SystemInfoAction;
 import cn.liushaofeng.easypc.actions.WifiAction;
 import easypc.MessagePopupAction;
 
@@ -49,7 +48,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     private IWorkbenchAction resetPerspectiveAction;
 
     // user define actions
-    private SystemInfoAction computerInfoAction;
     private WifiAction wifiAction;
 
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer)
@@ -89,7 +87,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         messagePopupAction = new MessagePopupAction("Open Message", window);
         register(messagePopupAction);
 
-        computerInfoAction = new SystemInfoAction();
         wifiAction = new WifiAction();
 
     }
@@ -130,7 +127,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
         coolBar.add(new ToolBarContributionItem(toolbar, "main"));
         toolbar.add(saveAction);
-        toolbar.add(computerInfoAction);
         toolbar.add(wifiAction);
     }
 
