@@ -1,5 +1,9 @@
 package cn.liushaofeng.easypc.util;
 
+import java.io.File;
+
+import javax.swing.filechooser.FileSystemView;
+
 import org.apache.log4j.Logger;
 import org.hyperic.sigar.FileSystem;
 import org.hyperic.sigar.FileSystemUsage;
@@ -23,6 +27,12 @@ public final class SystemUtil
     public static final int SYSTEM_CONSTANT_OS_TYPE_MAXOS = 0x2;
 
     private static Sigar sigar = new Sigar();
+
+    public static File getSysDktpDirFile()
+    {
+        FileSystemView fsv = FileSystemView.getFileSystemView();
+        return fsv.getHomeDirectory(); // 这便是读取桌面路径的方法了
+    }
 
     /**
      * get OS name

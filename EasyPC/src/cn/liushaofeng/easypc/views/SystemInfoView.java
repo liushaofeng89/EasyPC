@@ -150,7 +150,7 @@ public class SystemInfoView extends ViewPart
     private void makeActions()
     {
         // menu bar
-        exportAction = new SystemInfoExportAction();
+        exportAction = new SystemInfoExportAction(getViewSite());
     }
 
     private void fillMenuBar(IMenuManager menuManager)
@@ -168,4 +168,6 @@ public class SystemInfoView extends ViewPart
     {
 
     }
+    
+    
 }
