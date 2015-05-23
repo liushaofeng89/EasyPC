@@ -66,6 +66,8 @@ public class SystemInfoExportAction extends Action
     private void writeSysInfoToFile(final String filePath)
     {
         assert filePath != null;
+        final IStatusLineManager statusLineManager = iViewSite.getActionBars().getStatusLineManager();
+        statusLineManager.setMessage("Saving file:'" + filePath + "'...");
 
         Display.getCurrent().asyncExec(new Runnable()
         {
@@ -76,7 +78,6 @@ public class SystemInfoExportAction extends Action
                 List<String> systemInfo = CMDUtil.getSystemInfo();
                 try
                 {
-                    IStatusLineManager statusLineManager = iViewSite.getActionBars().getStatusLineManager();
                     IProgressMonitor progressMonitor = statusLineManager.getProgressMonitor();
                     progressMonitor.beginTask("Saving file:'" + filePath + "'", systemInfo.size());
 
@@ -84,22 +85,12 @@ public class SystemInfoExportAction extends Action
                     for (int i = 0; i < systemInfo.size() && !progressMonitor.isCanceled(); i++)
                     {
                         writer.write(systemInfo.get(i) + System.getProperty("line.separator"));
-                        progressMonitor.worked(0x1);
-                        progressMonitor.subTask("Saved:" + (i + 1) * 100d / systemInfo.size() + "%");
+                        progressMonitor.worked(1);
                     }
                     progressMonitor.done();
-                    if (progressMonitor.isCanceled())
-                    {
-                        throw new InterruptedException("Cancled save operation!");
-                    }
-                    // statusLineManager.setMessage("'" + filePath +
-                    // "' saved success!");
+                    statusLineManager.setMessage("'" + filePath + "' saved success!");
                 }
                 catch (IOException e)
-                {
-                    Logger.getLogger(this.getClass()).error(e.getMessage(), e);
-                }
-                catch (InterruptedException e)
                 {
                     Logger.getLogger(this.getClass()).error(e.getMessage(), e);
                 }

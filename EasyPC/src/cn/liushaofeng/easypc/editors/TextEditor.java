@@ -80,7 +80,7 @@ public class TextEditor extends EditorPart
         }
         catch (IOException e1)
         {
-            e1.printStackTrace();
+            Logger.getLogger(this.getClass()).error(e1.getMessage(), e1);
         }
         finally
         {
