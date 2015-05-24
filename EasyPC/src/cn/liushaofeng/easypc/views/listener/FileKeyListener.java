@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.TreeItem;
@@ -19,16 +21,19 @@ public class FileKeyListener implements KeyListener
 
     private TreeViewer fileTreeViewer;
     private FileMenuDetectListener menuDetectListner;
+    private Clipboard clipboard;
 
     /**
      * default constructor
      * @param fileTreeViewer
      * @param menuDetectListner FileMenuDetectListener
+     * @param clipboard clipboard
      */
-    public FileKeyListener(TreeViewer fileTreeViewer, FileMenuDetectListener menuDetectListner)
+    public FileKeyListener(TreeViewer fileTreeViewer, FileMenuDetectListener menuDetectListner, Clipboard clipboard)
     {
         this.fileTreeViewer = fileTreeViewer;
         this.menuDetectListner = menuDetectListner;
+        this.clipboard = clipboard;
     }
 
     @Override
@@ -53,6 +58,23 @@ public class FileKeyListener implements KeyListener
                 break;
             case SWT.DEL:
                 menuDetectListner.deleteFile(selectFiles);
+                break;
+            case 99:// 'C'
+                if ((e.stateMask & SWT.CTRL) != 0)
+                {
+                    String[] filesPath = new String[selectFiles.length];
+                    for (int i = 0; i < selectFiles.length; i++)
+                    {
+                        filesPath[i] = selectFiles[i].getAbsolutePath();
+                    }
+                    clipboard.setContents(new Object[]
+                    {
+                        filesPath
+                    }, new FileTransfer[]
+                    {
+                        FileTransfer.getInstance()
+                    });
+                }
                 break;
             case 118:// 'V'
                 if ((e.stateMask & SWT.CTRL) != 0)

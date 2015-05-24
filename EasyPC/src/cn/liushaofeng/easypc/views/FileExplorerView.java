@@ -8,11 +8,13 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 import cn.liushaofeng.easypc.app.Activator;
@@ -38,12 +40,14 @@ public class FileExplorerView extends ViewPart
     public static final String TIPS = "File Explorer"; //$NON-NLS-1$
 
     private TreeViewer fileTreeViewer = null;
+    private Clipboard clipboard = null;
 
     /**
      * default constructor
      */
     public FileExplorerView()
     {
+        this.clipboard = new Clipboard(Display.getCurrent());
     }
 
     @Override
@@ -91,9 +95,9 @@ public class FileExplorerView extends ViewPart
             }
         });
         fileTreeViewer.getTree().addSelectionListener(new FileSelectionListener(fileTreeViewer, getViewSite()));
-        FileMenuDetectListener menuDetectListner = new FileMenuDetectListener(fileTreeViewer);
+        FileMenuDetectListener menuDetectListner = new FileMenuDetectListener(fileTreeViewer, clipboard);
         fileTreeViewer.getTree().addMenuDetectListener(menuDetectListner);
-        fileTreeViewer.getTree().addKeyListener(new FileKeyListener(fileTreeViewer,menuDetectListner));
+        fileTreeViewer.getTree().addKeyListener(new FileKeyListener(fileTreeViewer, menuDetectListner, clipboard));
     }
 
     @Override

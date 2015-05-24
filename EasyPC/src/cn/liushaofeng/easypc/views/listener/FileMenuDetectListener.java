@@ -13,7 +13,6 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -38,12 +37,13 @@ public class FileMenuDetectListener implements MenuDetectListener
 
     /**
      * default constructor
+     * @param clipboard clipboard
      * @param tree file tree
      */
-    public FileMenuDetectListener(TreeViewer fileTreeViewer)
+    public FileMenuDetectListener(TreeViewer fileTreeViewer, Clipboard clipboard)
     {
         this.treeViewer = fileTreeViewer;
-        this.clipboard = new Clipboard(Display.getCurrent());
+        this.clipboard = clipboard;
     }
 
     @Override
@@ -116,6 +116,25 @@ public class FileMenuDetectListener implements MenuDetectListener
         MenuItem copyItem = new MenuItem(menu, SWT.PUSH);
         copyItem.setText("Copy\tCtrl+C");
         copyItem.setImage(Activator.getImage(false, "icons" + File.separator + "copy.gif"));
+        copyItem.addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                String[] filesPath = new String[selectFiles.length];
+                for (int i = 0; i < selectFiles.length; i++)
+                {
+                    filesPath[i] = selectFiles[i].getAbsolutePath();
+                }
+                clipboard.setContents(new Object[]
+                {
+                    filesPath
+                }, new FileTransfer[]
+                {
+                    FileTransfer.getInstance()
+                });
+            }
+        });
 
         MenuItem pasteItem = new MenuItem(menu, SWT.PUSH);
         pasteItem.setText("Paste\tCtrl+V");
