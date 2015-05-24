@@ -2,11 +2,13 @@ package cn.liushaofeng.easypc.views.listener;
 
 import java.io.File;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.widgets.Display;
 
 import cn.liushaofeng.easypc.util.FileUtil;
 
@@ -87,10 +89,19 @@ public class FileDropListener implements DropTargetListener
 
     private void hendleFile(File srcFile, File desFile)
     {
-        boolean copyFile = FileUtil.copyFile(srcFile, desFile);
-        if (copyFile)
+        // judge the destination file is exist or not
+        if (desFile.exists())
         {
-            FileUtil.deleteFile(srcFile);
+            boolean openQuestion = MessageDialog.openQuestion(Display.getCurrent().getActiveShell(),
+                "Remove File Notice", "The destination file is exist, do you want to override it?");
+            if (openQuestion)
+            {
+                boolean copyFile = FileUtil.copyFile(srcFile, desFile);
+                if (copyFile)
+                {
+                    FileUtil.deleteFile(srcFile);
+                }
+            }
         }
     }
 
