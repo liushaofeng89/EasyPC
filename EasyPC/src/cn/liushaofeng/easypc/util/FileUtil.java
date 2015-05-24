@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import org.apache.log4j.Logger;
 
@@ -174,46 +175,33 @@ public final class FileUtil
      */
     public static String convertSizeUnit(long size)
     {
-        long byteSpace = size / COMPUTER_UNIT_SIZE;
-        if (byteSpace > 1)
+        double kiloByte = size / COMPUTER_UNIT_SIZE;
+        if (kiloByte < 0x1)
         {
-            long kbSpace = byteSpace / COMPUTER_UNIT_SIZE;
-            if (kbSpace > 1)
-            {
-                long mbSpace = kbSpace / COMPUTER_UNIT_SIZE;
-                if (mbSpace > 1)
-                {
-                    long gbSpace = mbSpace / COMPUTER_UNIT_SIZE;
-                    if (gbSpace > 1)
-                    {
-                        long tbSpace = gbSpace / COMPUTER_UNIT_SIZE;
-                        if (tbSpace > 1)
-                        {
-                            return tbSpace + COMPUTER_UNIT_SIZE_PB;
-                        }
-                        else
-                        {
-                            return mbSpace + COMPUTER_UNIT_SIZE_TB;
-                        }
-                    }
-                    else
-                    {
-                        return mbSpace + COMPUTER_UNIT_SIZE_GB;
-                    }
-                }
-                else
-                {
-                    return kbSpace + COMPUTER_UNIT_SIZE_MB;
-                }
-            }
-            else
-            {
-                return byteSpace + COMPUTER_UNIT_SIZE_KB;
-            }
+            return size + "Byte(s)";
         }
-        else
+
+        double megaByte = kiloByte / COMPUTER_UNIT_SIZE;
+        if (megaByte < 0x1)
         {
-            return size + COMPUTER_UNIT_SIZE_BYTE;
+            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+            return result1.setScale(0x2, BigDecimal.ROUND_HALF_UP).toPlainString() + "KB";
         }
+
+        double gigaByte = megaByte / COMPUTER_UNIT_SIZE;
+        if (gigaByte < 0x1)
+        {
+            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+            return result2.setScale(0x2, BigDecimal.ROUND_HALF_UP).toPlainString() + "MB";
+        }
+
+        double teraBytes = gigaByte / COMPUTER_UNIT_SIZE;
+        if (teraBytes < 0x1)
+        {
+            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+            return result3.setScale(0x2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+        return result4.setScale(0x2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 }

@@ -27,6 +27,24 @@ public final class CMDUtil
     }
 
     /**
+     * open file by default way
+     */
+    public static void openFileByDefaultWay(File file)
+    {
+        try
+        {
+            Runtime.getRuntime().exec(new String[]
+            {
+                    "cmd.exe", "/c", file.getAbsolutePath()
+            });
+        }
+        catch (IOException e)
+        {
+            Logger.getLogger(CMDUtil.class).error(e.getMessage(), e);
+        }
+    }
+
+    /**
      * open the file dir
      * @param file the file dir need to open
      */

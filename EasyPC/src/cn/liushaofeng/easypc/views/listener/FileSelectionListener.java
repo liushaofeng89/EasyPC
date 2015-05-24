@@ -17,6 +17,7 @@ import org.eclipse.ui.PartInitException;
 
 import cn.liushaofeng.easypc.editors.TextEditor;
 import cn.liushaofeng.easypc.editors.input.TextEditorInput;
+import cn.liushaofeng.easypc.util.CMDUtil;
 
 /**
  * file double click event(open this file by default way)
@@ -76,6 +77,10 @@ public class FileSelectionListener extends SelectionAdapter
                 return;
             }
             activePage.activate(findEditor);
+        }
+        else
+        {
+            CMDUtil.openFileByDefaultWay(file);
         }
     }
 

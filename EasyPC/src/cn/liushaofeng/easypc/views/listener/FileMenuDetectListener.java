@@ -95,6 +95,18 @@ public class FileMenuDetectListener implements MenuDetectListener
 
         MenuItem openItem = new MenuItem(menu, SWT.PUSH);
         openItem.setText("Open");
+        openItem.addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                if (selectFiles.length > 0x1)
+                {
+                    return;
+                }
+                CMDUtil.openFileByDefaultWay(selectFiles[0]);
+            }
+        });
 
         MenuItem copyItem = new MenuItem(menu, SWT.PUSH);
         copyItem.setText("Copy\tCtrl+C");

@@ -28,10 +28,14 @@ public final class SystemUtil
 
     private static Sigar sigar = new Sigar();
 
+    /**
+     * get user desktop file
+     * @return user desktop file
+     */
     public static File getSysDktpDirFile()
     {
         FileSystemView fsv = FileSystemView.getFileSystemView();
-        return fsv.getHomeDirectory(); // 这便是读取桌面路径的方法了
+        return fsv.getHomeDirectory();
     }
 
     /**
