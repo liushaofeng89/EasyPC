@@ -145,6 +145,17 @@
       </view>
    </extension>
    
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="Network Center"
+            allowMultiple="true"
+            icon="icons/network.gif"
+            class="cn.liushaofeng.easypc.views.NetworkView"
+            id="cn.liushaofeng.easypc.views.networkview">
+      </view>
+   </extension>
+   
    
  	<extension
          point="org.eclipse.ui.editors">

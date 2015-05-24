@@ -2,9 +2,12 @@
 <introContent>
     <!-- Root page -->
     <page id="root" style="html/style.css"  style-id="page">	    
-        <title style-id="intro-header">Minimal Intro</title>
-        <link url="http://org.eclipse.ui.intro/switchToLaunchBar" label="Go to theWorkbench" id="workbench" />
-        <link label="Link to tutorials" url="http://org.eclipse.ui.intro/showPage?id=tutorials" id="tutorials" />
+        <title style-id="intro-header">Welcome to Easy PC 1.0.0</title>
+        <link label="Go to theWorkbench" url="http://org.eclipse.ui.intro/switchToLaunchBar" id="workbench" />
+        <link label="Simple User Tutorials" url="http://org.eclipse.ui.intro/showPage?id=simpleUser" id="simpleUser" />
+        <link label="Software Engineer Tutorials" url="http://org.eclipse.ui.intro/showPage?id=softwareEng" id="softwareEng" />
+        <link label="Network Engineer Tutorials" url="http://org.eclipse.ui.intro/showPage?id=networkEng" id="networkEng" />
+        <link label="Designer Tutorials" url="http://org.eclipse.ui.intro/showPage?id=designer" id="designer" />
     </page>
 	
     <!-- Standby page -->
@@ -12,9 +15,27 @@
    		 <title style-id="intro-header">Standby Page</title> 
     </page>    
     
-    <!-- Tutorials page -->
-	<page id="tutorials" style= "html/style.css" style-id="page">
+    <!-- Simple User -->
+	<page id="simpleUser" style= "html/style.css" style-id="page">
         <title style-id="intro-header">Tutorials</title>	
         <text>This page under construction</text>
     </page>   
+    
+    <!-- Software Engineer -->
+	<page id="softwareEng" style= "html/style.css" style-id="page">
+        <title style-id="intro-header">Tutorials</title>	
+        <text>This page under construction</text>
+    </page> 
+     
+    <!-- Network Engineer -->
+	<page id="networkEng" style= "html/style.css" style-id="page">
+        <title style-id="intro-header">Tutorials</title>	
+        <text>This page under construction</text>
+    </page> 
+     
+    <!-- Designer -->
+	<page id="designer" style= "html/style.css" style-id="page">
+        <title style-id="intro-header">Tutorials</title>	
+        <text>This page under construction</text>
+    </page>  
 </introContent>
