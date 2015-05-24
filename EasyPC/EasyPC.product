@@ -17,13 +17,14 @@
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="icons/EasyPC_16x16.gif" i32="icons/EasyPC_32x32.gif" i48="icons/EasyPC_48x48.gif" i64="icons/EasyPC_64x64.gif" i128="icons/EasyPC_128x128.gif"/>
+   <windowImages i16="icons/EasyPC_16x16.png" i32="icons/EasyPC_32x32.png" i48="icons/EasyPC_48x48.png" i64="icons/EasyPC_64x64.png" i128="icons/EasyPC_128x128.png"/>
 
    <splash
       location="EasyPC" />
    <launcher name="EasyPC">
       <solaris/>
       <win useIco="true">
+         <ico path="/EasyPC/icons/EasyPC.ico"/>
          <bmp/>
       </win>
    </launcher>

@@ -7,10 +7,13 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -31,6 +34,7 @@ public class FileMenuDetectListener implements MenuDetectListener
 {
 
     private TreeViewer treeViewer = null;
+    private Clipboard clipboard = null;
 
     /**
      * default constructor
@@ -39,6 +43,7 @@ public class FileMenuDetectListener implements MenuDetectListener
     public FileMenuDetectListener(TreeViewer fileTreeViewer)
     {
         this.treeViewer = fileTreeViewer;
+        this.clipboard = new Clipboard(Display.getCurrent());
     }
 
     @Override
@@ -115,6 +120,23 @@ public class FileMenuDetectListener implements MenuDetectListener
         MenuItem pasteItem = new MenuItem(menu, SWT.PUSH);
         pasteItem.setText("Paste\tCtrl+V");
         pasteItem.setImage(Activator.getImage(false, "icons" + File.separator + "paste.gif"));
+        pasteItem.setEnabled(clipboard.getContents(FileTransfer.getInstance()) != null);
+        pasteItem.addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                if (selectFiles.length > 0x1)
+                {
+                    return;
+                }
+
+                File file = selectFiles[0];
+                File desFile = file.isDirectory() ? file : file.getParentFile();
+                doCopyFile(desFile);
+                treeViewer.refresh();
+            }
+        });
 
         MenuItem deleteItem = new MenuItem(menu, SWT.PUSH);
         deleteItem.setText("Delete...\tDelete");
@@ -195,6 +217,20 @@ public class FileMenuDetectListener implements MenuDetectListener
         if (Window.OK == inputDialog.open())
         {
             createFiles(isFile, srcFile, shell, inputDialog);
+        }
+    }
+
+    /**
+     * copy files
+     * @param desFile
+     */
+    public void doCopyFile(File desFile)
+    {
+        String[] filePaths = (String[]) clipboard.getContents(FileTransfer.getInstance());
+        for (String filePath : filePaths)
+        {
+            File srcFile = new File(filePath);
+            FileUtil.copyFile(srcFile, new File(desFile.getAbsolutePath() + File.separator + srcFile.getName()));
         }
     }
 

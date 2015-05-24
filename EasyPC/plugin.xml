@@ -209,7 +209,7 @@
          </property>
          <property
                name="windowImages"
-               value="icons/EasyPC_16x16.gif,icons/EasyPC_32x32.gif,icons/EasyPC_48x48.gif,icons/EasyPC_64x64.gif,icons/EasyPC_128x128.gif">
+               value="icons/EasyPC_16x16.png,icons/EasyPC_32x32.png,icons/EasyPC_48x48.png,icons/EasyPC_64x64.png,icons/EasyPC_128x128.png">
          </property>
          <property
                name="aboutImage"

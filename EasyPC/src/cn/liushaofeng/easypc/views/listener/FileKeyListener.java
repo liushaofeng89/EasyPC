@@ -54,6 +54,14 @@ public class FileKeyListener implements KeyListener
             case SWT.DEL:
                 menuDetectListner.deleteFile(selectFiles);
                 break;
+            case 118:// 'V'
+                if ((e.stateMask & SWT.CTRL) != 0)
+                {
+                    menuDetectListner.doCopyFile(selectFiles[0].isDirectory() ? selectFiles[0] : selectFiles[0]
+                        .getParentFile());
+                    fileTreeViewer.refresh();
+                }
+                break;
 
             default:
                 break;
