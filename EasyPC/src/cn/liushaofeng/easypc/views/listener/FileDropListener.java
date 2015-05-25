@@ -94,14 +94,15 @@ public class FileDropListener implements DropTargetListener
         {
             boolean openQuestion = MessageDialog.openQuestion(Display.getCurrent().getActiveShell(),
                 "Remove File Notice", "The destination file is exist, do you want to override it?");
-            if (openQuestion)
+            if (!openQuestion)
             {
-                boolean copyFile = FileUtil.copyFile(srcFile, desFile);
-                if (copyFile)
-                {
-                    FileUtil.deleteFile(srcFile);
-                }
+                return;
             }
+        }
+        boolean copyFile = FileUtil.copyFile(srcFile, desFile);
+        if (copyFile)
+        {
+            FileUtil.deleteFile(srcFile);
         }
     }
 

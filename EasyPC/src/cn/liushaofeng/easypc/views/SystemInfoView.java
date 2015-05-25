@@ -9,6 +9,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -51,6 +52,8 @@ public class SystemInfoView extends ViewPart
     private static final String TAB_ITEM_OVERVIEW_NETWORD_CARD = "Netword Card:";//$NON-NLS-1$
 
     private SystemInfoExportAction exportAction;
+
+    private Table table;
 
     @Override
     public void createPartControl(Composite parent)
@@ -96,7 +99,7 @@ public class SystemInfoView extends ViewPart
 
     private Composite getOverviewContent(CTabFolder tabFolder)
     {
-        Table table = new Table(tabFolder, SWT.SINGLE | SWT.FULL_SELECTION);
+        this.table = new Table(tabFolder, SWT.SINGLE | SWT.FULL_SELECTION);
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         table.setLinesVisible(true);
         table.setHeaderVisible(true);
@@ -106,31 +109,39 @@ public class SystemInfoView extends ViewPart
         final TableColumn column2 = new TableColumn(table, SWT.NONE);
         column2.setText("Info Value");
 
-        List<String> systemInfo = CMDUtil.getSystemInfo();
-        for (String lineData : systemInfo)
+        Display.getCurrent().asyncExec(new Runnable()
         {
-            TableItem item = new TableItem(table, SWT.NONE);
-            int lastIndexOf = lineData.lastIndexOf(": ");
-            if (lastIndexOf == 0xFFFFFFFF)
-            {
-                item.setText(new String[]
-                {
-                        "", lineData.trim()
-                });
-            }
-            else
-            {
-                item.setText(new String[]
-                {
-                        lineData.substring(0, lastIndexOf).trim(), lineData.substring(lastIndexOf + 0x2).trim()
-                });
-            }
-        }
 
-        for (int i = 0; i < table.getColumnCount(); i++)
-        {
-            table.getColumn(i).pack();
-        }
+            @Override
+            public void run()
+            {
+                List<String> systemInfo = CMDUtil.getSystemInfo();
+                for (String lineData : systemInfo)
+                {
+                    TableItem item = new TableItem(table, SWT.NONE);
+                    int lastIndexOf = lineData.lastIndexOf(": ");
+                    if (lastIndexOf == 0xFFFFFFFF)
+                    {
+                        item.setText(new String[]
+                        {
+                                "", lineData.trim()
+                        });
+                    }
+                    else
+                    {
+                        item.setText(new String[]
+                        {
+                                lineData.substring(0, lastIndexOf).trim(), lineData.substring(lastIndexOf + 0x2).trim()
+                        });
+                    }
+                }
+
+                for (int i = 0; i < table.getColumnCount(); i++)
+                {
+                    table.getColumn(i).pack();
+                }
+            }
+        });
         // 创建action bar和menu bar
         contributeToActionBars();
 
@@ -168,6 +179,5 @@ public class SystemInfoView extends ViewPart
     {
 
     }
-    
-    
+
 }
