@@ -8,10 +8,16 @@ package cn.liushaofeng.easypc.model;
  */
 public class NetworkNodeModel
 {
+    public static final int NETWORK_NODE_TYPE_UNKNOWN = 0xFFFFFFFF;
+    public static final int NETWORK_NODE_TYPE_ROUTER = 0x0;
+    public static final int NETWORK_NODE_TYPE_COMPUTER = 0x1;
+    public static final int NETWORK_NODE_TYPE_CELLPHONE = 0x2;
+
     private String name;
     private String ipv4;
     private String ipv6;
     private String mac;
+    private boolean isOnline;
 
     /**
      * default constructor
@@ -58,6 +64,16 @@ public class NetworkNodeModel
     public void setMac(String mac)
     {
         this.mac = mac;
+    }
+
+    public boolean isOnline()
+    {
+        return isOnline;
+    }
+
+    public void setOnline(boolean isOnline)
+    {
+        this.isOnline = isOnline;
     }
 
 }

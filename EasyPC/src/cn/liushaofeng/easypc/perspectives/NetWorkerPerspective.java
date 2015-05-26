@@ -6,8 +6,8 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 import cn.liushaofeng.easypc.views.ConsoleView;
 import cn.liushaofeng.easypc.views.HttpLookView;
-import cn.liushaofeng.easypc.views.NetworkView;
 import cn.liushaofeng.easypc.views.ProcessView;
+import cn.liushaofeng.easypc.views.network.NetworkView;
 
 /**
  * Network perspective

@@ -1,4 +1,4 @@
-package cn.liushaofeng.easypc.views;
+package cn.liushaofeng.easypc.views.network;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -20,7 +20,7 @@ import cn.liushaofeng.easypc.views.provider.FileTreeLabelProvider;
  */
 public class NetworkView extends ViewPart
 {
-    public static final String ID = "cn.liushaofeng.easypc.views.networkview";
+    public static final String ID = "cn.liushaofeng.easypc.views.network.networkview";
     private TreeViewer treeViewer = null;
 
     @Override

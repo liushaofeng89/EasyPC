@@ -22,6 +22,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         return new ApplicationActionBarAdvisor(configurer);
     }
 
+    @Override
     public void preWindowOpen()
     {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
@@ -39,4 +40,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         preferenceStore.setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR,
             IWorkbenchPreferenceConstants.TOP_RIGHT);
     }
+
+    @Override
+    public void postWindowOpen()
+    {
+        //start a thread to collect local net information
+        
+    }
+
 }

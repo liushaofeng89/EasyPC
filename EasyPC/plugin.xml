@@ -151,8 +151,8 @@
             name="Network Center"
             allowMultiple="true"
             icon="icons/network.gif"
-            class="cn.liushaofeng.easypc.views.NetworkView"
-            id="cn.liushaofeng.easypc.views.networkview">
+            class="cn.liushaofeng.easypc.views.network.NetworkView"
+            id="cn.liushaofeng.easypc.views.network.networkview">
       </view>
    </extension>
    

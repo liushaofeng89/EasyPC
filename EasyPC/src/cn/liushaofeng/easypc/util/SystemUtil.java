@@ -1,6 +1,12 @@
 package cn.liushaofeng.easypc.util;
 
 import java.io.File;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -176,5 +182,99 @@ public final class SystemUtil
     public static String getGraphicsInfo()
     {
         return UNKNOWN;
+    }
+
+    /**
+     * get local area IP
+     * @return local area IP
+     */
+    public static String getLocalIP()
+    {
+        try
+        {
+            InetAddress localHost = InetAddress.getLocalHost();
+            return localHost.getHostAddress();
+        }
+        catch (UnknownHostException e)
+        {
+            Logger.getLogger(SystemUtil.class).error(e.getMessage(), e);
+            return null;
+        }
+    }
+
+    /**
+     * get Subnet mask
+     * @return Subnet mask
+     */
+    public static void getSubnetMask()
+    {
+        try
+        {
+            InetAddress localHost = Inet4Address.getLocalHost();
+            NetworkInterface networkInterface = NetworkInterface.getByInetAddress(localHost);
+            for (InterfaceAddress address : networkInterface.getInterfaceAddresses())
+            {
+                System.out.println(address.getNetworkPrefixLength());
+            }
+        }
+        catch (UnknownHostException e)
+        {
+            Logger.getLogger(SystemUtil.class).error(e.getMessage(), e);
+        }
+        catch (SocketException e)
+        {
+            Logger.getLogger(SystemUtil.class).error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * get MAC
+     * @return MAC
+     */
+    public static String getMAC()
+    {
+        try
+        {
+            InetAddress ia = InetAddress.getLocalHost();
+            byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
+            return convertToMAC(mac);
+        }
+        catch (UnknownHostException e)
+        {
+            Logger.getLogger(SystemUtil.class).error(e.getMessage(), e);
+        }
+        catch (SocketException e)
+        {
+            Logger.getLogger(SystemUtil.class).error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    /**
+     * convert byte MAC to string MAC
+     * @param mac byte MAC
+     * @return string MAC
+     */
+    public static String convertToMAC(byte[] mac)
+    {
+        assert mac.length != 0;
+        StringBuffer sb = new StringBuffer("");
+        for (int i = 0; i < mac.length; i++)
+        {
+            if (i != 0)
+            {
+                sb.append("-");
+            }
+            String str = Integer.toHexString(mac[i] & 0xff);
+            if (str.length() == 1)
+            {
+                sb.append("0" + str);
+            }
+            else
+            {
+                sb.append(str);
+            }
+        }
+        return sb.toString().toUpperCase();
     }
 }
