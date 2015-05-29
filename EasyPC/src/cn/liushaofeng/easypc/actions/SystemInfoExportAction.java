@@ -65,7 +65,11 @@ public class SystemInfoExportAction extends Action
 
     private void writeSysInfoToFile(final String filePath)
     {
-        assert filePath != null;
+        // if user canceled save action
+        if (filePath == null)
+        {
+            return;
+        }
         final IStatusLineManager statusLineManager = iViewSite.getActionBars().getStatusLineManager();
         statusLineManager.setMessage("Saving file:'" + filePath + "'...");
 

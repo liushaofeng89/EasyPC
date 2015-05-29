@@ -127,8 +127,7 @@ public class SigarTest
     {
         Sigar sigar = new Sigar();
         CpuInfo infos[] = sigar.getCpuInfoList();
-        CpuPerc cpuList[] = null;
-        cpuList = sigar.getCpuPercList();
+        CpuPerc[] cpuList = sigar.getCpuPercList();
         for (int i = 0; i < infos.length; i++)
         {// 不管是单块CPU还是多CPU都适用
             CpuInfo info = infos[i];
