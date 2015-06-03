@@ -21,6 +21,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
+import org.hyperic.sigar.FileSystem;
+import org.hyperic.sigar.FileSystemUsage;
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
@@ -84,6 +86,10 @@ public class SystemInfoView extends ViewPart
         cpuItem.setText(TAB_ITEM_CPU);
         cpuItem.setControl(getCPUContent(tabFolder));
 
+        CTabItem diskItem = new CTabItem(tabFolder, SWT.None);
+        diskItem.setText(TAB_ITEM_DISK);
+        diskItem.setControl(getDiskInfo(tabFolder));
+
         CTabItem mainBoardItem = new CTabItem(tabFolder, SWT.None);
         mainBoardItem.setText(TAB_ITEM_MAIN_BOARD);
         mainBoardItem.setControl(getMainboardContent(tabFolder));
@@ -93,9 +99,6 @@ public class SystemInfoView extends ViewPart
 
         CTabItem monitorItem = new CTabItem(tabFolder, SWT.None);
         monitorItem.setText(TAB_ITEM_MONITOR);
-
-        CTabItem diskItem = new CTabItem(tabFolder, SWT.None);
-        diskItem.setText(TAB_ITEM_DISK);
 
         CTabItem networkItem = new CTabItem(tabFolder, SWT.None);
         networkItem.setText(TAB_ITEM_NETWORK_CARD);
@@ -107,6 +110,130 @@ public class SystemInfoView extends ViewPart
         otherItem.setText(TAB_ITEM_OTHER);
 
         tabFolder.setSelection(0x0);
+    }
+
+    private Control getDiskInfo(CTabFolder tabFolder)
+    {
+        FileSystem fslist[];
+        try
+        {
+            fslist = sigar.getFileSystemList();
+        }
+        catch (SigarException e)
+        {
+            Label label = new Label(tabFolder, SWT.NONE);
+            label.setText("Get Disk information failed!");
+            return label;
+        }
+        // driver name
+        String[] deviceNames = new String[fslist.length + 1];
+        deviceNames[0] = "Type";
+        for (int i = 1; i <= fslist.length; i++)
+        {
+            deviceNames[i] = "Disk " + i;
+        }
+        // dir name
+        String[] dirNames = new String[fslist.length + 1];
+        dirNames[0] = "Directory Name";
+        // File system flags
+        Object[] fileSysFlags = new Object[fslist.length + 1];
+        fileSysFlags[0] = "File system flags";
+        // Get the File system os specific type name
+        String[] sysTypeNames = new String[fslist.length + 1];
+        sysTypeNames[0] = "System type name";
+        // local disk、driver、network file system
+        String[] typeNames = new String[fslist.length + 1];
+        typeNames[0] = "Type name";
+        // file system type
+        Object[] fileSysType = new Object[fslist.length + 1];
+        fileSysType[0] = "File system type";
+        // total size
+        Object[] totalSize = new Object[fslist.length + 1];
+        totalSize[0] = "File system total size";
+        // remain size
+        Object[] remainSize = new Object[fslist.length + 1];
+        remainSize[0] = "File system remain size";
+        // available size
+        Object[] availSize = new Object[fslist.length + 1];
+        availSize[0] = "File system available size";
+        // used size
+        Object[] usedSize = new Object[fslist.length + 1];
+        usedSize[0] = "File system used size";
+        // used percent
+        Object[] userPercent = new Object[fslist.length + 1];
+        userPercent[0] = "File system used percentage";
+        // Number of physical disk reads
+        Object[] reads = new Object[fslist.length + 1];
+        reads[0] = "Number of physical disk reads";
+        // Get the Number of physical disk writes.
+        Object[] writes = new Object[fslist.length + 1];
+        writes[0] = "Number of physical disk writes";
+
+        for (int i = 0; i < fslist.length; i++)
+        {
+            dirNames[i + 1] = fslist[i].getDirName();
+            fileSysFlags[i + 1] = fslist[i].getFlags();
+            sysTypeNames[i + 1] = fslist[i].getSysTypeName();// FAT32、NTFS
+            typeNames[i + 1] = fslist[i].getTypeName();// local disk、driver、network file system
+            fileSysType[i + 1] = fslist[i].getType();
+            try
+            {
+                FileSystemUsage usage = sigar.getFileSystemUsage(fslist[i].getDirName());
+                switch (fslist[i].getType())
+                {
+                    case 0: // TYPE_UNKNOWN ：未知
+                        break;
+                    case 1: // TYPE_NONE
+                        break;
+                    case 2: // TYPE_LOCAL_DISK : 本地硬盘
+                        // 文件系统总大小
+                        totalSize[i + 1] = usage.getTotal() + "KB";
+                        // 文件系统剩余大小
+                        remainSize[i + 1] = usage.getFree() + "KB";
+                        // 文件系统可用大小
+                        availSize[i + 1] = usage.getAvail() + "KB";
+                        // 文件系统已经使用量
+                        usedSize[i + 1] = usage.getUsed() + "KB";
+                        // 文件系统资源的利用率
+                        userPercent[i + 1] = usage.getUsePercent() * 100D + "%";
+                        reads[i + 1] = usage.getDiskReads();
+                        writes[i + 1] = usage.getDiskWrites();
+                        break;
+                    case 3:// TYPE_NETWORK ：网络
+                        break;
+                    case 4:// TYPE_RAM_DISK ：闪存
+                        break;
+                    case 5:// TYPE_CDROM ：光驱
+                        break;
+                    case 6:// TYPE_SWAP ：页面交换
+                        break;
+                }
+            }
+            catch (SigarException e)
+            {
+                Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+            }
+        }
+
+        final Table table = createTable(tabFolder, deviceNames);
+        createTableItem(table, dirNames);
+        createTableItem(table, fileSysFlags);
+        createTableItem(table, sysTypeNames);
+        createTableItem(table, typeNames);
+        createTableItem(table, fileSysType);
+        createTableItem(table, totalSize);
+        createTableItem(table, remainSize);
+        createTableItem(table, availSize);
+        createTableItem(table, usedSize);
+        createTableItem(table, userPercent);
+        createTableItem(table, reads);
+        createTableItem(table, writes);
+
+        for (int i = 0; i < table.getColumnCount(); i++)
+        {
+            table.getColumn(i).pack();
+        }
+        return table;
     }
 
     private Control getCPUContent(CTabFolder tabFolder)
@@ -292,10 +419,22 @@ public class SystemInfoView extends ViewPart
         return table;
     }
 
-    private TableItem createTableItem(Table table, String[] data)
+    private TableItem createTableItem(Table table, Object[] data)
     {
         TableItem tableItem = new TableItem(table, SWT.NONE);
-        tableItem.setText(data);
+        String[] text = new String[data.length];
+        for (int i = 0; i < data.length; i++)
+        {
+            if (data[i] instanceof String)
+            {
+                text[i] = (String) data[i];
+            }
+            else
+            {
+                text[i] = String.valueOf(data[i]);
+            }
+        }
+        tableItem.setText(text);
         return tableItem;
     }
 
