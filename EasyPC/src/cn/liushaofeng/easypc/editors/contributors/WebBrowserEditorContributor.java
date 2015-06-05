@@ -6,12 +6,12 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.ui.part.EditorActionBarContributor;
 
 /**
- * TextEditorContributor
+ * web browser editor contributor
  * @author liushaofeng
- * @date 2015年4月26日
+ * @date 2015-6-5
  * @version 1.0.0
  */
-public class TextEditorContributor extends EditorActionBarContributor
+public class WebBrowserEditorContributor extends EditorActionBarContributor
 {
 
     @Override

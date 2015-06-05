@@ -1,20 +1,28 @@
 package cn.liushaofeng.easypc.app;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.internal.util.PrefUtil;
 
+import cn.liushaofeng.easypc.editors.WebBrowserEditor;
+import cn.liushaofeng.easypc.editors.input.WebBrowserEditorInput;
+
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 {
+
+    private IWorkbenchWindowConfigurer configurer;
 
     public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer)
     {
         super(configurer);
+        this.configurer = configurer;
     }
 
     public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer)
@@ -44,8 +52,17 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     @Override
     public void postWindowOpen()
     {
-        //start a thread to collect local net information
-        
+        try
+        {
+            configurer.getWindow().getActivePage().openEditor(new WebBrowserEditorInput(), WebBrowserEditor.ID);
+        }
+        catch (PartInitException e)
+        {
+            Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+        }
+
+        // start a thread to collect local net information
+
     }
 
 }
