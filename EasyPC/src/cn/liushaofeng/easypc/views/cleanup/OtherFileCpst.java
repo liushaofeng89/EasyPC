@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
  * @date 2015-5-15
  * @version 1.0.0
  */
-public class OtherFileCmpst extends Composite
+public class OtherFileCpst extends Composite
 {
 
     /**
@@ -19,7 +19,7 @@ public class OtherFileCmpst extends Composite
      * @param parent parent composite
      * @param style composite style
      */
-    public OtherFileCmpst(Composite parent, int style)
+    public OtherFileCpst(Composite parent, int style)
     {
         super(parent, style);
         super.setLayout(new GridLayout(10, false));

@@ -52,7 +52,7 @@ public class CleanUpView extends ViewPart
 
         CTabItem otherItem = new CTabItem(folder, SWT.NONE);
         otherItem.setText("Other File");
-        OtherFileCmpst otherFileCmpst = new OtherFileCmpst(folder, SWT.NONE);
+        OtherFileCpst otherFileCmpst = new OtherFileCpst(folder, SWT.NONE);
         otherItem.setControl(otherFileCmpst);
 
         folder.setSelection(0x0);

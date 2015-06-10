@@ -7,8 +7,8 @@ import org.eclipse.ui.IPerspectiveFactory;
 import cn.liushaofeng.easypc.views.CleanUpFormView;
 import cn.liushaofeng.easypc.views.ContactView;
 import cn.liushaofeng.easypc.views.FileExplorerView;
-import cn.liushaofeng.easypc.views.SystemInfoView;
 import cn.liushaofeng.easypc.views.cleanup.CleanUpView;
+import cn.liushaofeng.easypc.views.sysinfo.SystemInfoView;
 
 /**
  * Simple user perspective

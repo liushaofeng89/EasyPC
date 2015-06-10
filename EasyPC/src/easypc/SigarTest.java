@@ -25,30 +25,30 @@ public class SigarTest
     {
         try
         {
-            // System信息，从jvm获取
-            property();
-            System.out.println("----------------------------------");
+            // //System信息，从jvm获取
+            // property();
+            // System.out.println("----------------------------------");
             // cpu信息
             cpu();
-            System.out.println("----------------------------------");
-            // 内存信息
-            memory();
-            System.out.println("----------------------------------");
-            // 操作系统信息
-            os();
-            System.out.println("----------------------------------");
-            // 用户信息
-            who();
-            System.out.println("----------------------------------");
-            // 文件系统信息
-            file();
-            System.out.println("----------------------------------");
-            // 网络信息
-            net();
-            System.out.println("----------------------------------");
-            // 以太网信息
-            ethernet();
-            System.out.println("----------------------------------");
+            // System.out.println("----------------------------------");
+            // // 内存信息
+            // memory();
+            // System.out.println("----------------------------------");
+            // // 操作系统信息
+            // os();
+            // System.out.println("----------------------------------");
+            // // 用户信息
+            // who();
+            // System.out.println("----------------------------------");
+            // // 文件系统信息
+            // file();
+            // System.out.println("----------------------------------");
+            // // 网络信息
+            // net();
+            // System.out.println("----------------------------------");
+            // // 以太网信息
+            // ethernet();
+            // System.out.println("----------------------------------");
         }
         catch (Exception e1)
         {
@@ -144,8 +144,10 @@ public class SigarTest
     {
         System.out.println("CPU用户使用率:    " + CpuPerc.format(cpu.getUser()));// 用户使用率
         System.out.println("CPU系统使用率:    " + CpuPerc.format(cpu.getSys()));// 系统使用率
-        System.out.println("CPU当前等待率:    " + CpuPerc.format(cpu.getWait()));// 当前等待率
+                System.out.println("CPU当前等待率:    " + CpuPerc.format(cpu.getWait()));// 当前等待率
+                
         System.out.println("CPU当前错误率:    " + CpuPerc.format(cpu.getNice()));//
+       
         System.out.println("CPU当前空闲率:    " + CpuPerc.format(cpu.getIdle()));// 当前空闲率
         System.out.println("CPU总的使用率:    " + CpuPerc.format(cpu.getCombined()));// 总的使用率
     }

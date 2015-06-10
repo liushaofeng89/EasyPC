@@ -1,4 +1,4 @@
-package cn.liushaofeng.easypc.views;
+package cn.liushaofeng.easypc.views.sysinfo;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -19,8 +20,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
-import org.hyperic.sigar.CpuInfo;
-import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.FileSystem;
 import org.hyperic.sigar.FileSystemUsage;
 import org.hyperic.sigar.Mem;
@@ -39,7 +38,7 @@ import cn.liushaofeng.easypc.util.CMDUtil;
  */
 public class SystemInfoView extends ViewPart
 {
-    public static final String ID = "cn.liushaofeng.easypc.views.systeminfoview";
+    public static final String ID = "cn.liushaofeng.easypc.views.sysinfo.systeminfoview";
 
     private static final String TAB_ITEM_OVERVIEW = "Overview";//$NON-NLS-1$
     private static final String TAB_ITEM_CPU = "CPU";//$NON-NLS-1$
@@ -72,7 +71,7 @@ public class SystemInfoView extends ViewPart
 
         CTabFolder tabFolder = new CTabFolder(parent, SWT.BOTTOM);
         tabFolder.setSimple(true);
-        tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+        tabFolder.setLayoutData(new FillLayout());
 
         CTabItem overviewItem = new CTabItem(tabFolder, SWT.None);
         overviewItem.setText(TAB_ITEM_OVERVIEW);
@@ -84,7 +83,7 @@ public class SystemInfoView extends ViewPart
 
         CTabItem cpuItem = new CTabItem(tabFolder, SWT.None);
         cpuItem.setText(TAB_ITEM_CPU);
-        cpuItem.setControl(getCPUContent(tabFolder));
+        cpuItem.setControl(new CPUCpst(tabFolder, sigar));
 
         CTabItem diskItem = new CTabItem(tabFolder, SWT.None);
         diskItem.setText(TAB_ITEM_DISK);
@@ -228,84 +227,6 @@ public class SystemInfoView extends ViewPart
         createTableItem(table, userPercent);
         createTableItem(table, reads);
         createTableItem(table, writes);
-
-        for (int i = 0; i < table.getColumnCount(); i++)
-        {
-            table.getColumn(i).pack();
-        }
-        return table;
-    }
-
-    private Control getCPUContent(CTabFolder tabFolder)
-    {
-        CpuInfo[] cpuInfoList = null;
-        CpuPerc[] cpuList = null;
-        try
-        {
-            cpuInfoList = sigar.getCpuInfoList();
-            cpuList = sigar.getCpuPercList();
-        }
-        catch (SigarException e)
-        {
-            Label label = new Label(tabFolder, SWT.NONE);
-            label.setText("Get CPU information failed!");
-            return label;
-        }
-        String[] columnNames = new String[cpuInfoList.length + 1];
-        columnNames[0] = "Type";
-        for (int i = 1; i < columnNames.length; i++)
-        {
-            columnNames[i] = "CPU " + String.valueOf(i);
-        }
-        final Table table = createTable(tabFolder, columnNames);
-
-        String[] mhzs = new String[cpuInfoList.length + 1];
-        mhzs[0] = "Total MHz";
-        String[] vendors = new String[cpuInfoList.length + 1];
-        vendors[0] = "Vendor";
-        String[] models = new String[cpuInfoList.length + 1];
-        models[0] = "Model";
-        String[] cacheSize = new String[cpuInfoList.length + 1];
-        cacheSize[0] = "CacheSize";
-        String[] corePerCPU = new String[cpuInfoList.length + 1];
-        corePerCPU[0] = "Cores in CPU";
-        String[] userUsePercent = new String[cpuInfoList.length + 1];
-        userUsePercent[0] = "User Usage Percentage";
-        String[] systemUsePercent = new String[cpuInfoList.length + 1];
-        systemUsePercent[0] = "System Usage Percentage";
-        String[] waitPercent = new String[cpuInfoList.length + 1];
-        waitPercent[0] = "Current Wait Percentage";
-        String[] errorPercent = new String[cpuInfoList.length + 1];
-        errorPercent[0] = "Error Percentage";
-        String[] freePercent = new String[cpuInfoList.length + 1];
-        freePercent[0] = "Free Percentage";
-        String[] totalUsagePercent = new String[cpuInfoList.length + 1];
-        totalUsagePercent[0] = "Total Usage Percentage";
-
-        for (int i = 0; i < cpuInfoList.length; i++)
-        {
-            mhzs[i + 1] = String.valueOf(cpuInfoList[i].getMhz());
-            vendors[i + 1] = String.valueOf(cpuInfoList[i].getVendor());
-            models[i + 1] = String.valueOf(cpuInfoList[i].getModel());
-            cacheSize[i + 1] = String.valueOf(cpuInfoList[i].getCacheSize());
-            corePerCPU[i + 1] = String.valueOf(cpuInfoList[i].getCoresPerSocket());
-            userUsePercent[i + 1] = String.valueOf(CpuPerc.format(cpuList[i].getUser()));
-            systemUsePercent[i + 1] = String.valueOf(CpuPerc.format(cpuList[i].getSys()));
-            waitPercent[i + 1] = String.valueOf(CpuPerc.format(cpuList[i].getWait()));
-            errorPercent[i + 1] = String.valueOf(CpuPerc.format(cpuList[i].getNice()));
-            freePercent[i + 1] = String.valueOf(CpuPerc.format(cpuList[i].getIdle()));
-            totalUsagePercent[i + 1] = String.valueOf(CpuPerc.format(cpuList[i].getCombined()));
-        }
-        createTableItem(table, mhzs);
-        createTableItem(table, vendors);
-        createTableItem(table, models);
-        createTableItem(table, cacheSize);
-        createTableItem(table, userUsePercent);
-        createTableItem(table, systemUsePercent);
-        createTableItem(table, waitPercent);
-        createTableItem(table, errorPercent);
-        createTableItem(table, freePercent);
-        createTableItem(table, totalUsagePercent);
 
         for (int i = 0; i < table.getColumnCount(); i++)
         {
