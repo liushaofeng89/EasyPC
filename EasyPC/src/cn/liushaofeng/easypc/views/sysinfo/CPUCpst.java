@@ -13,7 +13,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TableColumn;
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
@@ -44,14 +43,10 @@ public class CPUCpst extends Composite
         initUI();
     }
 
-    @Override
-    public void setLayout(Layout layout)
-    {
-        super.setLayout(new FillLayout());
-    }
-
     private void initUI()
     {
+        setLayout(new FillLayout());
+
         tableViewer = new TableViewer(this, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
         tableViewer.setContentProvider(new CPUTableContentProvider());
         tableViewer.setLabelProvider(new CPUTableLabelProvider());
@@ -194,7 +189,6 @@ public class CPUCpst extends Composite
                         return CpuPerc.format(model.getCpuPerc().getIdle());// 当前空闲率
                     case 0xa:
                         return CpuPerc.format(model.getCpuPerc().getCombined());// 总的使用率
-
                     default:
                         break;
                 }

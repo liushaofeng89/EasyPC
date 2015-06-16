@@ -43,13 +43,13 @@ public class SystemInfoView extends ViewPart
     private static final String TAB_ITEM_OVERVIEW = "Overview";//$NON-NLS-1$
     private static final String TAB_ITEM_CPU = "CPU";//$NON-NLS-1$
     private static final String TAB_ITEM_MAIN_BOARD = "Main Board";//$NON-NLS-1$
-    private static final String TAB_ITEM_MEMORY = "Memory Info";//$NON-NLS-1$
-    private static final String TAB_ITEM_GRAPHICS = "Graphics Info";//$NON-NLS-1$
-    private static final String TAB_ITEM_MONITOR = "Monitor Info";//$NON-NLS-1$
-    private static final String TAB_ITEM_DISK = "Disk Info";//$NON-NLS-1$
+    private static final String TAB_ITEM_MEMORY = "Memory";//$NON-NLS-1$
+    private static final String TAB_ITEM_GRAPHICS = "Graphics";//$NON-NLS-1$
+    private static final String TAB_ITEM_MONITOR = "Monitor";//$NON-NLS-1$
+    private static final String TAB_ITEM_DISK = "Disk";//$NON-NLS-1$
     private static final String TAB_ITEM_NETWORK_CARD = "Network Card";//$NON-NLS-1$
-    private static final String TAB_ITEM_AUDIO = "Audio Info";//$NON-NLS-1$
-    private static final String TAB_ITEM_OTHER = "Other Info";//$NON-NLS-1$
+    private static final String TAB_ITEM_AUDIO = "Audio";//$NON-NLS-1$
+    private static final String TAB_ITEM_OTHER = "Other";//$NON-NLS-1$
 
     private static final String TAB_ITEM_OVERVIEW_SYSTEM_MODE = "System Mode:";//$NON-NLS-1$
     private static final String TAB_ITEM_OVERVIEW_OPERATE_SYSTEM = "Operating System:";//$NON-NLS-1$
