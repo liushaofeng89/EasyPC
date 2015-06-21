@@ -1,7 +1,9 @@
 package cn.liushaofeng.easypc.views.sysinfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -9,7 +11,10 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -27,9 +32,13 @@ import org.hyperic.sigar.SigarException;
  */
 public class CPUCpst extends Composite
 {
-
+    private Map<String, Integer> columnMap = new HashMap<String, Integer>();
     private TableViewer tableViewer = null;
     private Sigar sigar;
+
+    private String[] columnsStr = new String[]
+    { "Index", "MHZ", "Vendor", "Mode", "Cache Size", "User Usage Percentage", "System Usage Percentage",
+            "Wait Percentage", "Error Percentage", "Free Percentage", "Total Usage Percentage" };
 
     /**
      * default constructor
@@ -40,7 +49,16 @@ public class CPUCpst extends Composite
     {
         super(parent, SWT.NONE);
         this.sigar = sigar;
+        initTableData();
         initUI();
+    }
+
+    private void initTableData()
+    {
+        for (int i = 0; i < columnsStr.length; i++)
+        {
+            columnMap.put(columnsStr[i], i);
+        }
     }
 
     private void initUI()
@@ -53,43 +71,33 @@ public class CPUCpst extends Composite
         tableViewer.getTable().setHeaderVisible(true);
         tableViewer.getTable().setLinesVisible(true);
 
-        final TableColumn indexColumn = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        indexColumn.setText("CPU Index");
+        for (int i = 0; i < columnsStr.length; i++)
+        {
+            final TableColumn indexColumn = new TableColumn(tableViewer.getTable(), SWT.NONE);
+            indexColumn.setText(columnsStr[i]);
+        }
 
-        final TableColumn mhzColumn = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        mhzColumn.setText("CPU MHZ");
+        tableViewer.setSorter(new TabelSorter());
+        initSortListener();
 
-        final TableColumn vendorColumn = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        vendorColumn.setText("CPU Vendor");
+        tableViewer.setInput(initCPUData());
 
-        final TableColumn modeColumn = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        modeColumn.setText("CPU Mode");
-
-        final TableColumn cacheSizeColumn = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        cacheSizeColumn.setText("Cache Size");
-
-        final TableColumn userUsagePercentage = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        userUsagePercentage.setText("User Usage Percentage");
-
-        final TableColumn sysUsagePercentage = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        sysUsagePercentage.setText("System Usage Percentage");
-
-        final TableColumn waitPercentage = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        waitPercentage.setText("Wait Percentage");
-
-        final TableColumn errorPercentage = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        errorPercentage.setText("Error Percentage");
-
-        final TableColumn freePercentage = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        freePercentage.setText("Free Percentage");
-
-        final TableColumn totalUsePercentage = new TableColumn(tableViewer.getTable(), SWT.NONE);
-        totalUsePercentage.setText("Total Usage Percentage");
-
-        tableViewer.setInput(initData());
+        for (int i = 0; i < tableViewer.getTable().getColumnCount(); i++)
+        {
+            tableViewer.getTable().getColumn(i).pack();
+        }
     }
 
-    private List<CPUModel> initData()
+    private void initSortListener()
+    {
+        TabelColumnSelectionListener selectListener = new TabelColumnSelectionListener();
+        for (int i = 0; i < columnsStr.length; i++)
+        {
+            tableViewer.getTable().getColumn(i).addSelectionListener(selectListener);
+        }
+    }
+
+    private List<CPUModel> initCPUData()
     {
         List<CPUModel> dataList = new ArrayList<CPUModel>();
         CpuInfo[] cpuInfoList = null;
@@ -98,17 +106,34 @@ public class CPUCpst extends Composite
         {
             cpuInfoList = sigar.getCpuInfoList();
             cpuList = sigar.getCpuPercList();
-        }
-        catch (SigarException e)
+        } catch (SigarException e)
         {
             Logger.getLogger(this.getClass()).error(e.getMessage(), e);
             return dataList;
         }
         for (int i = 0; i < cpuInfoList.length; i++)
         {
-            dataList.add(new CPUModel(cpuInfoList[i], cpuList[i]));
+            dataList.add(new CPUModel((i + 1), cpuInfoList[i], cpuList[i]));
         }
         return dataList;
+    }
+
+    /**
+     * table column selection listener
+     * @author liushaofeng
+     * @date 2015-6-20 下午08:57:48
+     * @version 1.0.0
+     */
+    private class TabelColumnSelectionListener extends SelectionAdapter
+    {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+            TableColumn tableColumn = (TableColumn) e.widget;
+
+            ((TabelSorter) tableViewer.getSorter()).sort(columnMap.get(tableColumn.getText()));
+            tableViewer.refresh();
+        }
     }
 
     /**
@@ -151,7 +176,6 @@ public class CPUCpst extends Composite
      */
     private class CPUTableLabelProvider implements ITableLabelProvider
     {
-        private int index = 0x1;
 
         @Override
         public Image getColumnImage(Object element, int columnIndex)
@@ -168,7 +192,7 @@ public class CPUCpst extends Composite
                 switch (columnIndex)
                 {
                     case 0x0:
-                        return String.valueOf(index);
+                        return String.valueOf(model.getIndex());
                     case 0x1:
                         return String.valueOf(model.getCpuInfo().getMhz());// CPU的总量MHz
                     case 0x2:
@@ -192,7 +216,6 @@ public class CPUCpst extends Composite
                     default:
                         break;
                 }
-                index++;
             }
             return null;
         }
@@ -228,6 +251,84 @@ public class CPUCpst extends Composite
     }
 
     /**
+     * table sorter
+     * @author liushaofeng
+     * @date 2015-6-20
+     * @version 1.0.0
+     */
+    private class TabelSorter extends ViewerSorter
+    {
+        private static final int ASC = 0;
+        private static final int DESC = 1;
+
+        private int sortType = 0;// asc or desc
+        private int sortColumn = 0; // sort column index
+
+        /**
+         * sort clicked column
+         * @param column the column need to sort
+         */
+        public void sort(int column)
+        {
+            if (column == sortColumn)
+            {
+                sortType = 0x1 - sortType;
+            } else
+            {
+                this.sortColumn = column;
+                sortType = ASC;// 默认升序排列
+            }
+        }
+
+        @Override
+        public int compare(Viewer viewer, Object e1, Object e2)
+        {
+            CPUModel model1 = (CPUModel) e1;
+            CPUModel model2 = (CPUModel) e2;
+
+            switch (sortColumn)
+            {
+                case 0x0:
+                    return model1.getIndex() > model2.getIndex() ? 0x1 : 0xffffffff;
+                case 0x1:
+                    return collator.compare(model1.getCpuInfo().getMhz(), model2.getCpuInfo().getMhz());
+                case 0x2:
+
+                    break;
+                case 0x3:
+
+                    break;
+                case 0x4:
+
+                    break;
+                case 0x5:
+
+                    break;
+                case 0x6:
+
+                    break;
+                case 0x7:
+
+                    break;
+                case 0x8:
+
+                    break;
+                case 0x9:
+
+                    break;
+                case 0xa:
+
+                    break;
+
+                default:
+                    break;
+            }
+            return super.compare(viewer, e1, e2);
+        }
+
+    }
+
+    /**
      * CPU info mode
      * @author liushaofeng
      * @date 2015-6-10下午11:43:36
@@ -235,18 +336,26 @@ public class CPUCpst extends Composite
      */
     public class CPUModel
     {
+        private int index;
         private CpuInfo cpuInfo;
         private CpuPerc cpuPerc;
 
         /**
          * constructor
-         * @param cpuInfo cpuInfo
-         * @param cpuPerc cpuPerc
+         * @param i CPU index
+         * @param cpuInfo CPU Info
+         * @param cpuPerc CPU cpuPerc
          */
-        public CPUModel(CpuInfo cpuInfo, CpuPerc cpuPerc)
+        public CPUModel(int i, CpuInfo cpuInfo, CpuPerc cpuPerc)
         {
+            this.index = i;
             this.cpuInfo = cpuInfo;
             this.cpuPerc = cpuPerc;
+        }
+
+        public int getIndex()
+        {
+            return index;
         }
 
         public CpuInfo getCpuInfo()
