@@ -129,7 +129,7 @@
       <view
             name="System Info"
             allowMultiple="true"
-            icon="icons/systeminfo.png"
+            icon="icons/systeminfo.gif"
             class="cn.liushaofeng.easypc.views.sysinfo.SystemInfoView"
             id="cn.liushaofeng.easypc.views.sysinfo.systeminfoview">
       </view>

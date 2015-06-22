@@ -1,22 +1,16 @@
 package cn.liushaofeng.easypc.views.sysinfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableColumn;
 import org.hyperic.sigar.CpuInfo;
@@ -30,16 +24,8 @@ import org.hyperic.sigar.SigarException;
  * @date 2015-6-10下午11:15:48
  * @version 1.0.0
  */
-public class CPUCpst extends Composite
+public class CPUCpst extends SystemInfoTableCpst
 {
-    private Map<String, Integer> columnMap = new HashMap<String, Integer>();
-    private TableViewer tableViewer = null;
-    private Sigar sigar;
-
-    private String[] columnsStr = new String[]
-    { "Index", "MHZ", "Vendor", "Mode", "Cache Size", "User Usage Percentage", "System Usage Percentage",
-            "Wait Percentage", "Error Percentage", "Free Percentage", "Total Usage Percentage" };
-
     /**
      * default constructor
      * @param parent parent composite
@@ -47,45 +33,14 @@ public class CPUCpst extends Composite
      */
     public CPUCpst(Composite parent, Sigar sigar)
     {
-        super(parent, SWT.NONE);
-        this.sigar = sigar;
-        initTableData();
+        super(parent, sigar);
         initUI();
-    }
-
-    private void initTableData()
-    {
-        for (int i = 0; i < columnsStr.length; i++)
-        {
-            columnMap.put(columnsStr[i], i);
-        }
     }
 
     private void initUI()
     {
-        setLayout(new FillLayout());
-
-        tableViewer = new TableViewer(this, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
-        tableViewer.setContentProvider(new CPUTableContentProvider());
-        tableViewer.setLabelProvider(new CPUTableLabelProvider());
-        tableViewer.getTable().setHeaderVisible(true);
-        tableViewer.getTable().setLinesVisible(true);
-
-        for (int i = 0; i < columnsStr.length; i++)
-        {
-            final TableColumn indexColumn = new TableColumn(tableViewer.getTable(), SWT.NONE);
-            indexColumn.setText(columnsStr[i]);
-        }
-
         tableViewer.setSorter(new TabelSorter());
         initSortListener();
-
-        tableViewer.setInput(initCPUData());
-
-        for (int i = 0; i < tableViewer.getTable().getColumnCount(); i++)
-        {
-            tableViewer.getTable().getColumn(i).pack();
-        }
     }
 
     private void initSortListener()
@@ -95,27 +50,6 @@ public class CPUCpst extends Composite
         {
             tableViewer.getTable().getColumn(i).addSelectionListener(selectListener);
         }
-    }
-
-    private List<CPUModel> initCPUData()
-    {
-        List<CPUModel> dataList = new ArrayList<CPUModel>();
-        CpuInfo[] cpuInfoList = null;
-        CpuPerc[] cpuList = null;
-        try
-        {
-            cpuInfoList = sigar.getCpuInfoList();
-            cpuList = sigar.getCpuPercList();
-        } catch (SigarException e)
-        {
-            Logger.getLogger(this.getClass()).error(e.getMessage(), e);
-            return dataList;
-        }
-        for (int i = 0; i < cpuInfoList.length; i++)
-        {
-            dataList.add(new CPUModel((i + 1), cpuInfoList[i], cpuList[i]));
-        }
-        return dataList;
     }
 
     /**
@@ -133,38 +67,6 @@ public class CPUCpst extends Composite
 
             ((TabelSorter) tableViewer.getSorter()).sort(columnMap.get(tableColumn.getText()));
             tableViewer.refresh();
-        }
-    }
-
-    /**
-     * CPU table content provider
-     * @author liushaofeng
-     * @date 2015-6-10下午11:32:14
-     * @version 1.0.0
-     */
-    private class CPUTableContentProvider implements IStructuredContentProvider
-    {
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public Object[] getElements(Object inputElement)
-        {
-            if (inputElement instanceof List)
-            {
-                return ((List<CPUModel>) inputElement).toArray();
-            }
-            return null;
-        }
-
-        @Override
-        public void dispose()
-        {
-        }
-
-        @Override
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
-        {
-
         }
     }
 
@@ -334,7 +236,7 @@ public class CPUCpst extends Composite
      * @date 2015-6-10下午11:43:36
      * @version 1.0.0
      */
-    public class CPUModel
+    public class CPUModel extends SystemInfoDataModel
     {
         private int index;
         private CpuInfo cpuInfo;
@@ -368,5 +270,42 @@ public class CPUCpst extends Composite
             return cpuPerc;
         }
 
+    }
+
+    @Override
+    protected void initColumnNames()
+    {
+        columnsStr = new String[]
+        { "Index", "MHZ", "Vendor", "Mode", "Cache Size", "User Usage Percentage",
+                "System Usage Percentage", "Wait Percentage", "Error Percentage", "Free Percentage",
+                "Total Usage Percentage" };
+    }
+
+    @Override
+    protected ITableLabelProvider setLabelProvider()
+    {
+        return new CPUTableLabelProvider();
+    }
+
+    @Override
+    protected List<SystemInfoDataModel> setInput()
+    {
+        List<SystemInfoDataModel> dataList = new ArrayList<SystemInfoDataModel>();
+        CpuInfo[] cpuInfoList = null;
+        CpuPerc[] cpuList = null;
+        try
+        {
+            cpuInfoList = sigar.getCpuInfoList();
+            cpuList = sigar.getCpuPercList();
+        } catch (SigarException e)
+        {
+            Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+            return dataList;
+        }
+        for (int i = 0; i < cpuInfoList.length; i++)
+        {
+            dataList.add(new CPUModel((i + 1), cpuInfoList[i], cpuList[i]));
+        }
+        return dataList;
     }
 }
