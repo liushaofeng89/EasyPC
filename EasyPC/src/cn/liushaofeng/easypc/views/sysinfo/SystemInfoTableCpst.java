@@ -68,6 +68,9 @@ public abstract class SystemInfoTableCpst extends Composite
         {
             tableViewer.getTable().getColumn(i).pack();
         }
+
+        tableViewer.getTable().setSortColumn(tableViewer.getTable().getColumn(0));
+        tableViewer.getTable().setSortDirection(SWT.UP);
     }
 
     /**

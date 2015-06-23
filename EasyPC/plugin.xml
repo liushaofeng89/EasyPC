@@ -45,7 +45,7 @@
       <view
             name="File Explorer"
             allowMultiple="true"
-            icon="icons/home.gif"
+            icon="icons/file.gif"
             class="cn.liushaofeng.easypc.views.FileExplorerView"
             id="cn.liushaofeng.easypc.views.fileexplorerview">
       </view>

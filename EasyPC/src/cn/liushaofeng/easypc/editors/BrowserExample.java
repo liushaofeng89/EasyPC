@@ -102,7 +102,7 @@ public class BrowserExample
         });
         if (top)
         {
-            browser.setUrl("http://liushaofeng.cn");
+            browser.setUrl("http://easypc.liushaofeng.cn");
             show(false, null, null, true, true, true, true);
         }
         else
@@ -237,7 +237,7 @@ public class BrowserExample
             {
                 public void handleEvent(Event e)
                 {
-                    browser.setUrl("http://liushaofeng.cn");
+                    browser.setUrl("http://easypc.liushaofeng.cn");
                 }
             });
 

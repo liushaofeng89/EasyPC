@@ -8,6 +8,7 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.StatusLineContributionItem;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
@@ -22,17 +23,15 @@ import cn.liushaofeng.easypc.actions.WifiAction;
 import easypc.MessagePopupAction;
 
 /**
- * An action bar advisor is responsible for creating, adding, and disposing of
- * the actions added to a workbench window. Each window will be populated with
- * new actions.
+ * An action bar advisor is responsible for creating, adding, and disposing of the actions added to a workbench window.
+ * Each window will be populated with new actions.
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 {
 
     private static final String WORKING_SET_STATUS_LINE_FILE_GROUP = "workingSetStatusLineFileGroup"; //$NON-NLS-1$
-    private static final String WORKING_SET_STATUS_LINE_PROGRESS_GROUP = "workingSetStatusLineProgressGroup"; //$NON-NLS-1$
     private static final String WORKING_SET_STATUS_LINE_NETWORK_GROUP = "workingSetStatusLineNetworkGroup"; //$NON-NLS-1$
-    private static final String WORKING_SET_STATUS_LINE_DESIGN_GROUP = "workingSetStatusLineDesignGroup"; //$NON-NLS-1$
+    private static final String WORKING_SET_STATUS_LINE_PROGRESS_GROUP = "workingSetStatusLineProgressGroup"; //$NON-NLS-1$
 
     // Actions - important to allocate these only in makeActions, and then use
     // them
@@ -133,8 +132,22 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     @Override
     protected void fillStatusLine(IStatusLineManager statusLine)
     {
-        statusLine.add(new Separator(WORKING_SET_STATUS_LINE_FILE_GROUP));
-        statusLine.appendToGroup(WORKING_SET_STATUS_LINE_FILE_GROUP, new Separator());
+        // statusLine.add(new Separator(WORKING_SET_STATUS_LINE_FILE_GROUP));
+        // statusLine.appendToGroup(WORKING_SET_STATUS_LINE_FILE_GROUP, new Separator());
+
         super.fillStatusLine(statusLine);
+
+        StatusLineContributionItem fileItem = new StatusLineContributionItem(WORKING_SET_STATUS_LINE_FILE_GROUP, 15);
+        StatusLineContributionItem networkItem = new StatusLineContributionItem(WORKING_SET_STATUS_LINE_NETWORK_GROUP,
+            15);
+        StatusLineContributionItem progressItem = new StatusLineContributionItem(
+            WORKING_SET_STATUS_LINE_PROGRESS_GROUP, 50);
+        fileItem.setText("File Info");
+        networkItem.setText("Network Info");
+        progressItem.setText("Progress");
+
+        statusLine.add(fileItem);
+        statusLine.add(networkItem);
+        statusLine.add(progressItem);
     }
 }
