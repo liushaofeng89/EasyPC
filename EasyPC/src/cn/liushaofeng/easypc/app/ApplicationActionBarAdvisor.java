@@ -1,5 +1,7 @@
 package cn.liushaofeng.easypc.app;
 
+import java.io.File;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.ICoolBarManager;
@@ -72,9 +74,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         register(resetPerspectiveAction);
 
         aboutAction = ActionFactory.ABOUT.create(window);
+        aboutAction.setImageDescriptor(Activator.getImageDescriptor("icons" + File.separator + "info.png"));
         register(aboutAction);
 
         introAction = ActionFactory.INTRO.create(window);
+        introAction.setImageDescriptor(Activator.getImageDescriptor("icons" + File.separator + "welcome.gif"));
         register(introAction);
 
         newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(window);

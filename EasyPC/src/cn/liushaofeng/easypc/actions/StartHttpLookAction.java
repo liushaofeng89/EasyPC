@@ -6,6 +6,12 @@ import org.eclipse.jface.action.Action;
 
 import cn.liushaofeng.easypc.app.Activator;
 
+/**
+ * start http look action
+ * @author liushaofeng
+ * @date 2015-6-24上午07:51:04
+ * @version 1.0.0
+ */
 public class StartHttpLookAction extends Action
 {
     public static final String ID = "cn.liushaofeng.easypc.actions.starthttplookaction";
@@ -16,6 +22,9 @@ public class StartHttpLookAction extends Action
 
     private boolean isStart = false;
 
+    /**
+     * default constructor
+     */
     public StartHttpLookAction()
     {
         super(ACTION_TEXT_START, Activator.getImageDescriptor("icons" + File.separator + "run.gif"));
