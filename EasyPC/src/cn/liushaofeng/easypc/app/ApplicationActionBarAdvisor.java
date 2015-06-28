@@ -51,6 +51,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     // user define actions
     private WifiAction wifiAction;
 
+    /**
+     * default constructor
+     * @param configurer configurer
+     */
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer)
     {
         super(configurer);
@@ -139,13 +143,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         // statusLine.add(new Separator(WORKING_SET_STATUS_LINE_FILE_GROUP));
         // statusLine.appendToGroup(WORKING_SET_STATUS_LINE_FILE_GROUP, new Separator());
 
-        super.fillStatusLine(statusLine);
-
         StatusLineContributionItem fileItem = new StatusLineContributionItem(WORKING_SET_STATUS_LINE_FILE_GROUP, 15);
         StatusLineContributionItem networkItem = new StatusLineContributionItem(WORKING_SET_STATUS_LINE_NETWORK_GROUP,
             15);
         StatusLineContributionItem progressItem = new StatusLineContributionItem(
             WORKING_SET_STATUS_LINE_PROGRESS_GROUP, 50);
+
         fileItem.setText("File Info");
         networkItem.setText("Network Info");
         progressItem.setText("Progress");

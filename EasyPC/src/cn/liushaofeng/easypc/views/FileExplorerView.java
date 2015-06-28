@@ -3,6 +3,7 @@ package cn.liushaofeng.easypc.views;
 import java.io.File;
 
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -15,8 +16,10 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
+import cn.liushaofeng.easypc.actions.CollapseAllAction;
 import cn.liushaofeng.easypc.app.Activator;
 import cn.liushaofeng.easypc.util.FileUtil;
 import cn.liushaofeng.easypc.views.listener.FileDragListener;
@@ -41,6 +44,7 @@ public class FileExplorerView extends ViewPart
 
     private TreeViewer fileTreeViewer = null;
     private Clipboard clipboard = null;
+    private CollapseAllAction collapseAllAction;
 
     /**
      * default constructor
@@ -98,6 +102,27 @@ public class FileExplorerView extends ViewPart
         FileMenuDetectListener menuDetectListner = new FileMenuDetectListener(fileTreeViewer, clipboard);
         fileTreeViewer.getTree().addMenuDetectListener(menuDetectListner);
         fileTreeViewer.getTree().addKeyListener(new FileKeyListener(fileTreeViewer, menuDetectListner, clipboard));
+
+        contributeToActionBars();
+    }
+
+    // create menu and toolbar
+    private void contributeToActionBars()
+    {
+        makeActions();
+
+        IActionBars actionBars = getViewSite().getActionBars();
+        fillToolsBar(actionBars.getToolBarManager());
+    }
+
+    private void fillToolsBar(IToolBarManager toolBarManager)
+    {
+        toolBarManager.add(collapseAllAction);
+    }
+
+    private void makeActions()
+    {
+        collapseAllAction = new CollapseAllAction(fileTreeViewer);
     }
 
     @Override

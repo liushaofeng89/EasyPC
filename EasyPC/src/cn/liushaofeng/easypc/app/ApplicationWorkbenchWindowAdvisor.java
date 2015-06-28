@@ -1,6 +1,9 @@
 package cn.liushaofeng.easypc.app;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -44,12 +47,27 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     @Override
     public void postWindowOpen()
     {
+        openBrowserEditor();
+        // update status line information
+        IStatusLineManager statusLineManager = getWindowConfigurer().getActionBarConfigurer().getStatusLineManager();
+        IContributionItem[] items = statusLineManager.getItems();
+        for (IContributionItem iContributionItem : items)
+        {
+            if (iContributionItem instanceof GroupMarker)
+            {
+                GroupMarker groupMarker = (GroupMarker) iContributionItem;
+                groupMarker.setVisible(true);
+            }
+        }
+        statusLineManager.setMessage("Welcome to use EasyPC.");
+    }
 
+    private void openBrowserEditor()
+    {
         Shell shell = getWindowConfigurer().getWindow().getShell();
         Rectangle screenSize = Display.getDefault().getClientArea();
         Rectangle frameSize = shell.getBounds();
         shell.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
-
         try
         {
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -59,8 +77,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
         {
             Logger.getLogger(this.getClass()).error(e.getMessage(), e);
         }
-        // start a thread to collect local net information
-
     }
 
     @Override
@@ -70,7 +86,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 
         MessageBox msgBox = new MessageBox(new Shell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
         msgBox.setText("Confirm Exit");
-        msgBox.setMessage("Do you want exit application system?  ");
+        msgBox.setMessage("Do you want exit application system?");
         int open = msgBox.open();
         if (open == SWT.YES)
         {

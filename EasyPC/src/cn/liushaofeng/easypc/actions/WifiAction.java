@@ -18,7 +18,7 @@ public class WifiAction extends Action
 {
     public WifiAction()
     {
-        super("Create WIFI", Activator.getImageDescriptor("icons" + File.separator + "wifi.gif"));
+        super("Create WIFI", Activator.getImageDescriptor("icons" + File.separator + "wifi.png"));
     }
 
     @Override
