@@ -59,7 +59,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
                 groupMarker.setVisible(true);
             }
         }
-        statusLineManager.setMessage("Welcome to use EasyPC.");
+        statusLineManager.setMessage("Welcome to EasyPC.");
     }
 
     private void openBrowserEditor()
