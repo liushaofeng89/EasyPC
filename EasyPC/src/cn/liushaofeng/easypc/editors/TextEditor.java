@@ -1,12 +1,10 @@
 package cn.liushaofeng.easypc.editors;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,22 +34,56 @@ public class TextEditor extends EditorPart
     private Text text;
     private boolean isDirty;
 
-    private TextEditorInput TextEditorInput;
+    private File file;
 
     @Override
     public void init(IEditorSite site, IEditorInput input) throws PartInitException
     {
-        this.setSite(site);
-        this.setInput(input);
-        this.setPartName(input.getName());
-        this.TextEditorInput = (TextEditorInput) input;
+        if (input instanceof TextEditorInput)
+        {
+            TextEditorInput textInput = (TextEditorInput) input;
+            this.file = textInput.getFile();
+            FileReader fileReader = null;
+            try
+            {
+                fileReader = new FileReader(textInput.getFile());
+                char[] readBuffer = new char[1];
+                while (fileReader.read(readBuffer) != -1)
+                {
+                    text.append(String.valueOf(readBuffer));
+                }
+            }
+            catch (IOException e)
+            {
+                Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+            }
+            finally
+            {
+                if (fileReader != null)
+                {
+                    try
+                    {
+                        fileReader.close();
+                    }
+                    catch (IOException e)
+                    {
+                        Logger.getLogger(this.getClass()).error(e.getMessage(), e);
+                    }
+                    fileReader = null;
+                }
+            }
+
+        }
+
+        setSite(site);
+        setInput(input);
+        setPartName(input.getName());
     }
 
     @Override
     public void createPartControl(Composite arg0)
     {
         text = new Text(arg0, SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI);
-        initValToText(TextEditorInput);
         text.addModifyListener(new ModifyListener()
         {
             @Override
@@ -73,7 +105,7 @@ public class TextEditor extends EditorPart
         BufferedWriter bufferedWriter = null;
         try
         {
-            bufferedWriter = new BufferedWriter(new FileWriter(TextEditorInput.getFile()));
+            bufferedWriter = new BufferedWriter(new FileWriter(file));
             bufferedWriter.write(text.getText());
             setDirty(false);
             // 更改编辑器状态
@@ -125,46 +157,4 @@ public class TextEditor extends EditorPart
         text.setFocus();
     }
 
-    private void initValToText(IEditorInput input)
-    {
-        if (input instanceof TextEditorInput)
-        {
-            TextEditorInput textInput = (TextEditorInput) input;
-            BufferedReader bufferedReader = null;
-            try
-            {
-                bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(textInput.getFile()),
-                    "gbk"));
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null)
-                {
-                    text.append(line + System.getProperty("line.separator"));
-                }
-            }
-            catch (FileNotFoundException e)
-            {
-                Logger.getLogger(this.getClass()).error(e.getMessage(), e);
-            }
-            catch (IOException e)
-            {
-                Logger.getLogger(this.getClass()).error(e.getMessage(), e);
-            }
-            finally
-            {
-                if (bufferedReader != null)
-                {
-                    try
-                    {
-                        bufferedReader.close();
-                    }
-                    catch (IOException e)
-                    {
-                        Logger.getLogger(this.getClass()).error(e.getMessage(), e);
-                    }
-                    bufferedReader = null;
-                }
-            }
-
-        }
-    }
 }
